@@ -47,4 +47,4 @@ Estes são os critérios observáveis que atestam o domínio da competência pel
 ## 📅 Histórico de Aulas (Planejadas/Realizadas)
 - **Aula 01 (08/06/2026):** Introdução a Bancos de Dados — Diferenciação de dados e informações, volatilidade da RAM vs. persistência física, e a dinâmica lúdica "Stop dos Dados" diferenciando SGBDs SQL e NoSQL.
 - **Aula 02 (22/06/2026):** Levantamento de Requisitos e o Minimundo — Conceitos de escopo em linguagem natural, aplicação de perguntas guia de investigação e simulação de requisitos através de role-play e prompts de IA.
-- **Aula 03 (29/06/2026):** Homologação de Requisitos no GitHub — Escrita final e versionamento do `minimundo.md` no repositório, realização de auditoria cruzada por pares (Peer Review) e tratamento de lacunas de escopo através de GitHub Issues.
+- **Aula 03 (06/07/2026):** Homologação de Requisitos no GitHub — Escrita final e versionamento do `minimundo.md` no repositório, realização de auditoria cruzada por pares (Peer Review) e tratamento de lacunas de escopo através de GitHub Issues.
