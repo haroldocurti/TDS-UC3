@@ -1,8 +1,60 @@
-# Unidade Curricular 3 (UC3): Modelar e estruturar banco de dados
+# Unidade Curricular 3 (UC3): Modelar e Estruturar Banco de Dados
 
 Esta Unidade Curricular (UC) foca no desenvolvimento da capacidade do futuro Técnico em Desenvolvimento de Sistemas de projetar, modelar e estruturar bancos de dados relacionais que atendam aos requisitos de sistemas de software. Os alunos aprenderão a traduzir regras de negócios em diagramas de dados (DER/MER), aplicar técnicas de normalização e construir bancos de dados relacionais utilizando a linguagem SQL para a criação e manipulação dos dados.
 
-**Carga Horária Total:** 60 horas
+**Carga Horária Total:** 60 horas  
+**Curso:** Técnico em Desenvolvimento de Sistemas — Senac
+
+---
+
+## 📁 Estrutura do Repositório
+
+Neste repositório você encontrará todos os materiais pedagógicos e guias de acompanhamento da UC3:
+
+* **[Guia_de_aulas/](Guia_de_aulas/)**: Roteiros das aulas práticas e teóricas, contendo objetivos, competências mobilizadas, instruções passo a passo e desafios.
+* **[Biblioteca/](Biblioteca/)**: Acervo de materiais complementares em PDF, áudios, vídeos e infográficos explicativos para aprofundamento nos tópicos da disciplina.
+
+---
+
+## 📅 Histórico e Guias das Aulas
+
+Acompanhe os guias detalhados de cada encontro da UC3:
+
+- **[Aula 01 (08/06/2026)](Guia_de_aulas/Guia_Aluno_Aula01.md): Introdução a Bancos de Dados**  
+  Diferenciação de dados e informações, volatilidade da memória RAM vs. persistência física, o papel dos SGBDs e a dinâmica lúdica *"Stop dos Dados"* comparando bancos SQL e NoSQL.
+
+- **[Aula 02 (22/06/2026)](Guia_de_aulas/Guia_Aluno_Aula02.md): Levantamento de Requisitos e o Minimundo**  
+  Conceitos de escopo em linguagem natural, aplicação de perguntas guia de investigação e simulação de requisitos através de role-play e prompts de IA.
+
+- **[Aula 03 (29/06/2026)](Guia_de_aulas/Guia_Aluno_Aula03.md): Escrita do Minimundo, GitHub e Homologação de Requisitos**  
+  Redação formal e versionamento do `minimundo.md` no GitHub, realização de auditoria cruzada por pares (*Peer Review*) e tratamento de lacunas de escopo via GitHub Issues.
+
+- **[Aula 04 (27/07/2026)](Guia_de_aulas/Guia_Aluno_Aula04.md): Validação do DER, MER e Dicionário de Dados**  
+  Revisão e auditoria técnica da documentação de modelagem iniciada na UC1. Alinhamento de regras de normalização, verificação de chaves primárias e estrangeiras e especificação do Dicionário de Dados.
+
+- **[Aula 05 (03/08/2026)](Guia_de_aulas/Guia_Aluno_Aula05.md): Do Minimundo à Normalização e Primeiro Acesso ao phpMyAdmin**  
+  Pipeline da engenharia de dados, aplicação prática das Formas Normais (**1FN, 2FN e 3FN**) para eliminação de redundâncias e navegação inicial na interface do phpMyAdmin.
+
+- **[Aula 06 (04/08/2026)](Guia_de_aulas/Guia_Aluno_Aula06.md): Roteiro Prático de SQL — O Universo dos Games Retrô (DDL e DML)**  
+  Construção e manipulação na prática do banco de dados *Retro-Vault*. Aplicação de comandos DDL (`CREATE`, `ALTER`), DML (`INSERT`, `UPDATE`), chaves estrangeiras (`FOREIGN KEY`) e escolha estratégica de charset (`utf8mb4`).
+
+---
+
+## 📚 Biblioteca de Apoio e Materiais Complementares
+
+Consulte os arquivos na pasta **[Biblioteca/](Biblioteca/)** para aprofundar seu conhecimento:
+
+| Arquivo | Formato | Descrição |
+| --- | --- | --- |
+| `Comandos DDL do MySQL.pdf` | Documento PDF | Guia de referência rápida para comandos de definição de dados (`CREATE`, `ALTER`, `DROP`). |
+| `Comandos DML em MySQL.pdf` | Documento PDF | Manual prático para inserção, atualização e consulta de dados (`INSERT`, `UPDATE`, `DELETE`, `SELECT`). |
+| `Constraints de Tabela no MySQL_ Funções e Exemplos.pdf` | Documento PDF | Explicação sobre restrições de integridade (`PRIMARY KEY`, `FOREIGN KEY`, `NOT NULL`, `UNIQUE`, `CHECK`). |
+| `Guia de Elaboração de Minimundo_.pdf` | Documento PDF | Orientações detalhadas para delimitação e escrita de escopos de sistemas (Minimundo). |
+| `MER_para_DDL.pdf` | Documento PDF | Passo a passo técnico para traduzir o Modelo Entidade-Relacionamento em scripts SQL DDL. |
+| `minimundo_ate_normalizacao.pdf` | Documento PDF | Resumo ilustrado da trajetória do levantamento de requisitos até a 3ª Forma Normal. |
+| `Da_Modelagem_Lógica_ao_MySQL_Físico.m4a` | Áudio (Podclass) | Explicação narrada sobre a transição entre modelagem conceitual/lógica e o banco de dados MySQL físico. |
+| `O_Dicionário_de_Dados_schemas_SQL.mp4` | Vídeo Explicativo | Demonstração sobre a importância e estrutura do Dicionário de Dados e Schemas no SQL. |
+| `Comparação_entre_utf8_e_utf8mb4.png` | Infográfico | Comparativo detalhado entre os conjuntos de caracteres `utf8` e `utf8mb4` e seu suporte a emojis e símbolos suplementares. |
 
 ---
 
@@ -44,7 +96,9 @@ Estes são os critérios observáveis que atestam o domínio da competência pel
 
 ---
 
-## 📅 Histórico de Aulas (Planejadas/Realizadas)
-- **Aula 01 (08/06/2026):** Introdução a Bancos de Dados — Diferenciação de dados e informações, volatilidade da RAM vs. persistência física, e a dinâmica lúdica "Stop dos Dados" diferenciando SGBDs SQL e NoSQL.
-- **Aula 02 (22/06/2026):** Levantamento de Requisitos e o Minimundo — Conceitos de escopo em linguagem natural, aplicação de perguntas guia de investigação e simulação de requisitos através de role-play e prompts de IA.
-- **Aula 03 (06/07/2026):** Homologação de Requisitos no GitHub — Escrita final e versionamento do `minimundo.md` no repositório, realização de auditoria cruzada por pares (Peer Review) e tratamento de lacunas de escopo através de GitHub Issues.
+## 💡 Orientações aos Alunos
+
+1. **Foco Prático:** Utilize o repositório como guia durante as aulas no laboratório e para revisão individual.
+2. **Execução de Scripts:** Ao rodar scripts SQL das aulas no phpMyAdmin ou MySQL Workbench, certifique-se de selecionar sua base de dados individual atribuída.
+3. **Dúvidas e Sugestões:** Sinta-se à vontade para utilizar as *Issues* do GitHub ou entrar em contato com o docente para tirar dúvidas de modelagem e SQL.
+

@@ -1,0 +1,1088 @@
+<!doctype html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>Aulas 02 e 03 - Modelagem de Dados: Requisitos e Minimundo</title>
+    <meta name="description"
+        content="Apresentação de slides para as Aulas 02 e 03 da UC3 de TI Senac sobre Modelagem de Banco de Dados, focando em Levantamento de Requisitos, Minimundo, Git/GitHub, Auditoria Cruzada e Homologação.">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/theme/black.min.css" id="theme">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/highlight/monokai.min.css">
+
+    <!-- Google Fonts: Outfit (modern, high tech) & JetBrains Mono (clean code font) -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+        :root {
+            --r-main-font: 'Outfit', sans-serif;
+            --r-heading-font: 'Outfit', sans-serif;
+            --r-code-font: 'JetBrains Mono', monospace;
+            --emerald: #00f5a0;
+            --teal: #00d9f5;
+            --violet: #9d4edd;
+            --purple: #7b2cbf;
+            --amber: #ff9e00;
+            --red: #ff5f56;
+            --glass-bg: rgba(10, 16, 26, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.6);
+            --neon-glow: 0 0 15px rgba(0, 245, 160, 0.2);
+        }
+
+        /* Fundo Dinâmico Mesh Gradient com tema de banco de dados/estruturas */
+        .reveal-viewport {
+            background: radial-gradient(circle at 10% 20%, #030712 0%, #0c1220 40%, #020306 90%) !important;
+            overflow: hidden;
+        }
+
+        /* Orbs de fundo brilhantes e lentos */
+        .reveal-viewport::before,
+        .reveal-viewport::after {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            filter: blur(150px);
+            z-index: 0;
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
+        .reveal-viewport::before {
+            background: var(--emerald);
+            top: -120px;
+            left: -120px;
+            animation: float-slow 22s ease-in-out infinite alternate;
+        }
+
+        .reveal-viewport::after {
+            background: var(--purple);
+            bottom: -120px;
+            right: -120px;
+            animation: float-slow 28s ease-in-out infinite alternate-reverse;
+        }
+
+        @keyframes float-slow {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            100% {
+                transform: translate(60px, 40px) scale(1.1);
+            }
+        }
+
+        /* Configuração Base Slides */
+        .reveal {
+            font-family: var(--r-main-font);
+            color: #e2e8f0;
+        }
+
+        .reveal h1,
+        .reveal h2,
+        .reveal h3,
+        .reveal h4 {
+            font-weight: 800;
+            letter-spacing: -1px;
+            text-transform: none;
+            color: #ffffff;
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+        }
+
+        .reveal h1 {
+            font-size: 2.1em;
+            background: linear-gradient(135deg, #ffffff 30%, var(--emerald) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+            line-height: 1.1;
+        }
+
+        .reveal h2 {
+            font-size: 1.45em;
+            border-bottom: 2px solid var(--glass-border);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--emerald) 0%, var(--teal) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+        }
+
+        .reveal h3 {
+            font-size: 1.05em;
+            color: var(--teal);
+            margin: 12px 0;
+            font-weight: 700;
+        }
+
+        .reveal h4 {
+            font-size: 0.9em;
+            color: #ffffff;
+            margin-bottom: 5px;
+        }
+
+        /* Glassmorphism Cards */
+        .glass-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 22px 28px;
+            box-shadow: var(--glass-shadow);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            margin: 12px auto;
+            text-align: left;
+            max-width: 920px;
+            position: relative;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(0, 245, 160, 0.2);
+            box-shadow: 0 15px 45px 0 rgba(0, 0, 0, 0.7), 0 0 20px rgba(0, 245, 160, 0.05);
+        }
+
+        .glass-card p {
+            font-size: 0.78em;
+            line-height: 1.45;
+            color: #cbd5e1;
+            margin: 0 0 12px 0;
+        }
+
+        .glass-card p:last-child {
+            margin-bottom: 0;
+        }
+
+        .glass-card ul,
+        .glass-card ol {
+            margin-left: 24px;
+            color: #cbd5e1;
+            font-size: 0.72em;
+        }
+
+        .glass-card li {
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .glass-card li::marker {
+            color: var(--emerald);
+        }
+
+        /* Layout em Colunas */
+        .cols {
+            display: flex;
+            gap: 18px;
+            align-items: stretch;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .col {
+            flex: 1;
+            background: rgba(12, 18, 32, 0.55);
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            padding: 18px;
+            backdrop-filter: blur(10px);
+            text-align: left;
+            position: relative;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .col:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 217, 245, 0.25);
+        }
+
+        .col h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 0.85em;
+            color: #ffffff;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 8px;
+        }
+
+        .col p {
+            font-size: 0.68em;
+            line-height: 1.4;
+            margin: 0 0 12px 0;
+            color: #cbd5e1;
+        }
+
+        .col ul {
+            margin-left: 18px;
+            font-size: 0.62em;
+            color: #cbd5e1;
+            padding: 0;
+        }
+
+        .col li {
+            margin-bottom: 6px;
+        }
+
+        /* Destaques e Badges */
+        .badge {
+            background: rgba(0, 245, 160, 0.08);
+            color: var(--emerald);
+            border: 1px solid rgba(0, 245, 160, 0.25);
+            border-radius: 50px;
+            padding: 4px 14px;
+            font-size: 0.42em;
+            font-weight: 700;
+            display: inline-block;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            box-shadow: var(--neon-glow);
+        }
+
+        .badge-alt {
+            background: rgba(0, 217, 245, 0.08);
+            color: var(--teal);
+            border: 1px solid rgba(0, 217, 245, 0.25);
+        }
+
+        .badge-warning {
+            background: rgba(255, 158, 0, 0.08);
+            color: var(--amber);
+            border: 1px solid rgba(255, 158, 0, 0.25);
+            box-shadow: 0 0 15px rgba(255, 158, 0, 0.15);
+        }
+
+        /* Tabelas Customizadas */
+        .reveal table {
+            font-size: 0.54em;
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 12px;
+            background: rgba(8, 12, 22, 0.5);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+        }
+
+        .reveal th,
+        .reveal td {
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--glass-border);
+            text-align: left;
+        }
+
+        .reveal th {
+            background: rgba(0, 245, 160, 0.08);
+            color: var(--emerald);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.9em;
+            letter-spacing: 0.5px;
+        }
+
+        .reveal tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Caixa de Código e Editor de Requisitos */
+        .reveal pre {
+            box-shadow: none;
+            margin: 8px 0;
+            background: transparent;
+            width: 100%;
+        }
+
+        .reveal code {
+            font-family: var(--r-code-font);
+            border-radius: 6px;
+            padding: 2px 6px;
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--teal);
+            font-size: 0.85em;
+        }
+
+        .reveal pre code {
+            font-size: 0.6em;
+            line-height: 1.4;
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+            background: #05080f !important;
+            max-height: 380px;
+            border-radius: 8px;
+        }
+
+        /* Mock Editor Requisitos/Minimundo */
+        .editor-box {
+            background: #05080f;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 12px 0;
+            box-shadow: var(--glass-shadow);
+        }
+
+        .editor-header {
+            background: #0e1422;
+            padding: 8px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .editor-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .editor-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .dot-red {
+            background: var(--red);
+        }
+
+        .dot-yellow {
+            background: var(--amber);
+        }
+
+        .dot-green {
+            background: var(--emerald);
+        }
+
+        .editor-title {
+            color: #94a3b8;
+            font-size: 0.52em;
+            font-weight: 600;
+            font-family: var(--r-main-font);
+            letter-spacing: 0.5px;
+        }
+
+        .editor-box pre {
+            margin: 0;
+        }
+
+        .editor-box pre code {
+            border: none !important;
+            border-radius: 0;
+            background: transparent !important;
+        }
+
+        .highlight-accent {
+            color: var(--emerald) !important;
+            font-weight: bold;
+        }
+
+        .highlight-warn {
+            color: var(--amber) !important;
+        }
+
+        .reveal .slides section[data-autoslide] {
+            transition: all 0.5s ease;
+        }
+
+        /* Balão de Citação Refinado */
+        .quote-box {
+            border-left: 4px solid var(--emerald);
+            background: rgba(0, 245, 160, 0.03);
+            border-radius: 0 12px 12px 0;
+            padding: 15px 20px;
+            margin: 15px 0;
+            text-align: left;
+        }
+
+        .quote-box p {
+            font-style: italic;
+            color: #f1f5f9;
+            font-size: 0.82em !important;
+            line-height: 1.4;
+            margin: 0;
+        }
+
+        /* Efeitos visuais adicionais */
+        .grid-questions {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .question-card {
+            background: rgba(12, 18, 32, 0.45);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .question-card span {
+            font-size: 0.58em;
+            font-weight: 700;
+            color: var(--emerald);
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .question-card p {
+            font-size: 0.65em;
+            margin: 0;
+            line-height: 1.35;
+            color: #cbd5e1;
+        }
+
+        /* Ajustes específicos para slides verticais */
+        .navigate-down-indicator {
+            font-size: 0.5em;
+            color: var(--teal);
+            animation: pulse-bounce 2s infinite;
+            margin-top: 10px;
+            font-weight: 600;
+        }
+
+        @keyframes pulse-bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+                opacity: 0.5;
+            }
+
+            50% {
+                transform: translateY(6px);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="reveal">
+        <div class="slides">
+
+            <!-- ==================== PARTE 1: AULA 02 ==================== -->
+
+            <!-- SLIDE 1: Capa Aula 02 -->
+            <section data-transition="zoom" id="slide-capa-02">
+                <div class="badge">UC3 - Modelar e Estruturar Banco de Dados</div>
+                <h1>Levantamento de Requisitos e o Minimundo</h1>
+                <p style="font-size: 0.78em; color: #94a3b8; margin-bottom: 25px;">
+                    Como traduzir as necessidades reais do negócio sem falar termos técnicos
+                </p>
+                <div class="glass-card" style="text-align: center; max-width: 600px;">
+                    <p style="margin: 0; font-size: 0.68em; font-weight: 600; color: #cbd5e1;">
+                        🧑‍🏫 Prof. Haroldo Curti &nbsp;|&nbsp; 📅 22/06/2026 &nbsp;|&nbsp; 🏫 Aula 02
+                    </p>
+                </div>
+            </section>
+
+            <!-- SLIDE 2: Objetivos Aula 02 -->
+            <section data-transition="slide-in fade-out" id="slide-objetivos-02">
+                <div class="badge badge-alt">🎯 Objetivos de Hoje</div>
+                <h2>O Caminho da Modelagem</h2>
+                <div class="glass-card">
+                    <p>Ao longo desta sessão de trabalho, você vai:</p>
+                    <ul style="margin-top: 10px;">
+                        <li class="fragment"><strong>Compreender o Minimundo:</strong> Entender sua função como alicerce
+                            fundamental do projeto de banco de dados.</li>
+                        <li class="fragment"><strong>Dominar o Levantamento de Requisitos:</strong> Aprender a conduzir
+                            e estruturar a busca pelas regras de negócio corretas.</li>
+                        <li class="fragment"><strong>Realizar Entrevistas na Prática:</strong> Vivenciar a dinâmica de
+                            entrevista com clientes reais ou simulados via IA.</li>
+                        <li class="fragment"><strong>Focar no Usuário:</strong> Aprender a abstrair as regras do
+                            cotidiano sem usar jargões e termos técnicos de TI.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- SLIDE 3: Recapitulando a Aula 01 -->
+            <section data-transition="slide-in fade-out" id="slide-recap-01">
+                <div class="badge badge-alt">🔍 Recapitulando</div>
+                <h2>A Base do Conhecimento</h2>
+                <p style="font-size: 0.7em; color: #94a3b8; margin-top: -10px; margin-bottom: 10px;">O que vimos na
+                    nossa última aula?</p>
+
+                <div class="cols">
+                    <div class="col fragment">
+                        <h3>🔢 Dados vs Informação</h3>
+                        <p>Os dados brutos necessitam de contexto, relações e rótulos para gerar informação
+                            compreensível.</p>
+                        <span style="font-size: 0.58em; color: var(--emerald); font-weight: 600;">Exemplo: O mistério do
+                            "42".</span>
+                    </div>
+                    <div class="col fragment">
+                        <h3>💾 Por que Persistir?</h3>
+                        <p>A memória RAM é rápida porém volátil. Garantimos a permanência e segurança dos dados
+                            gravando-os em disco.</p>
+                        <span style="font-size: 0.58em; color: var(--emerald); font-weight: 600;">Integridade física
+                            garantida.</span>
+                    </div>
+                    <div class="col fragment">
+                        <h3>⚡ SQL vs NoSQL</h3>
+                        <p>Contrastamos modelos estruturados, relacionais e rígidos contra estruturas altamente
+                            flexíveis e escaláveis.</p>
+                        <span style="font-size: 0.58em; color: var(--emerald); font-weight: 600;">Tabelas relacionais vs
+                            Coleções.</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 4: O Dilema do Analista -->
+            <section data-transition="slide-in fade-out" id="slide-dilema-analista">
+                <div class="badge badge-warning">💬 O Desafio da Tradução</div>
+                <h2>O Dilema do Analista</h2>
+
+                <div class="quote-box">
+                    <p>"Fui contratado para modelar o banco de dados de uma Pet Shop. Por onde eu começo?"</p>
+                </div>
+
+                <div class="glass-card" style="margin-top: 15px;">
+                    <p style="font-size: 0.75em; margin-bottom: 8px;">Lembre-se sempre de uma premissa vital:</p>
+                    <ul style="font-size: 0.68em;">
+                        <li class="fragment">O banco de dados serve para solucionar um <strong>problema real</strong> e
+                            gerar valor ao negócio.</li>
+                        <li class="fragment highlight-warn"><strong>Mas o cliente final não fala SQL!</strong></li>
+                        <li class="fragment">Ele desconhece conceitos de <em>"Chaves Primárias"</em>,
+                            <em>"Tabelas"</em>, <em>"Campos"</em> ou <em>"Cardinalidade"</em>.</li>
+                        <li class="fragment">Nossa missão é aprender a escutar e mapear o negócio usando a linguagem
+                            dele.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- SLIDE 5: O que é o Minimundo? -->
+            <section data-transition="slide-in fade-out" id="slide-definicao-minimundo">
+                <div class="badge badge-alt">🌍 Definição</div>
+                <h2>O que é o "Minimundo"?</h2>
+
+                <div class="glass-card">
+                    <p style="font-size: 0.85em; font-weight: 500;">
+                        O <strong>Minimundo</strong> (ou Escopo do Sistema) é a descrição textual detalhada de uma
+                        parcela específica do mundo real que será informatizada.
+                    </p>
+                    <hr style="border: 0; border-top: 1px solid var(--glass-border); margin: 15px 0;">
+                    <ul>
+                        <li class="fragment"><strong>O Recorte da Realidade:</strong> O mundo dos negócios é
+                            infinitamente complexo. O Minimundo serve para estabelecer limites bem delineados.</li>
+                        <li class="fragment"><strong>Fronteiras Claras:</strong> Ele descreve exatamente o que o sistema
+                            de banco de dados <strong>irá guardar e organizar</strong>, bem como o que <strong>ficará de
+                                fora</strong> do desenvolvimento.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- SLIDE 6: A Regra de Ouro do Minimundo -->
+            <section data-transition="slide-in fade-out" id="slide-regra-ouro">
+                <div class="badge badge-warning">🏆 Essencial</div>
+                <h2>A Regra de Ouro do Minimundo</h2>
+
+                <div class="cols" style="margin-bottom: 15px;">
+                    <div class="col" style="border-left: 4px solid var(--red); flex: 1.2;">
+                        <h3 style="color: var(--red);">🚫 O que NÃO Fazer?</h3>
+                        <p style="font-size: 0.72em;">É expressamente <strong>proibido</strong> o uso de termos e
+                            jargões computacionais no corpo do documento:</p>
+                        <ul style="font-size: 0.62em;">
+                            <li>"Tabelas de Clientes"</li>
+                            <li>"Campo chave primária"</li>
+                            <li>"Atributo estrangeiro"</li>
+                            <li>"Relacionamento N para N"</li>
+                        </ul>
+                    </div>
+                    <div class="col" style="border-left: 4px solid var(--emerald);">
+                        <h3 style="color: var(--emerald);">👍 Como Deve Ser?</h3>
+                        <p style="font-size: 0.72em;">Deve ser elaborado em <strong>linguagem de negócios natural e
+                                acessível</strong> para qualquer pessoa leiga:</p>
+                        <ul style="font-size: 0.62em;">
+                            <li>"Registrar dados dos Clientes"</li>
+                            <li>"Código identificador de produto"</li>
+                            <li>"Um cliente pode comprar vários produtos em uma venda"</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="quote-box" style="margin-top: 10px;">
+                    <p style="text-align: center;">O cliente de negócios deve ler o texto e assinar em baixo dizendo:
+                        <br><strong>"Sim! É exatamente isso que a minha empresa faz e precisa!"</strong></p>
+                </div>
+            </section>
+
+            <!-- SLIDE 7: Exemplo A -->
+            <section data-transition="slide-in fade-out" id="slide-exemplo-a">
+                <div class="badge">Exemplo Real</div>
+                <h2>Reserva de Equipamentos</h2>
+
+                <div class="editor-box">
+                    <div class="editor-header">
+                        <div class="editor-dots">
+                            <span class="editor-dot dot-red"></span>
+                            <span class="editor-dot dot-yellow"></span>
+                            <span class="editor-dot dot-green"></span>
+                        </div>
+                        <span class="editor-title">minimundo_reserva.txt</span>
+                        <span style="font-size: 0.5em; color: #64748b;">UTF-8</span>
+                    </div>
+                    <pre><code class="language-text" data-noescape>"Os professores da universidade precisam de um sistema para reservar equipamentos tecnológicos (como datashow e caixas de som) para suas aulas. 
+
+O sistema precisa registrar os professores (através de CPF, nome completo e titulação acadêmica). 
+
+As reservas são formalizadas com as secretárias do setor (que possuem CPF, nome e turno de trabalho). A reserva deve conter a data do evento, a hora de início da aula, a sala de aula e a lista de equipamentos solicitados. 
+
+Todo equipamento é identificado por um número de tombamento patrimonial único, além de sua respectiva marca e tipo de aparelho..."</code></pre>
+                </div>
+                <p style="font-size: 0.65em; color: var(--teal); margin: 0; text-align: left;">
+                    💡 Perceba: Não há menção a "tabelas" ou "chaves", mas a estrutura dos dados futuros já está
+                    transparente.
+                </p>
+            </section>
+
+            <!-- SLIDE 8: Exemplo B -->
+            <section data-transition="slide-in fade-out" id="slide-exemplo-b">
+                <div class="badge">Exemplo Real</div>
+                <h2>Acervo da Livraria Universitária</h2>
+
+                <div class="editor-box">
+                    <div class="editor-header">
+                        <div class="editor-dots">
+                            <span class="editor-dot dot-red"></span>
+                            <span class="editor-dot dot-yellow"></span>
+                            <span class="editor-dot dot-green"></span>
+                        </div>
+                        <span class="editor-title">minimundo_livraria.txt</span>
+                        <span style="font-size: 0.5em; color: #64748b;">UTF-8</span>
+                    </div>
+                    <pre><code class="language-text" data-noescape>"A livraria universitária precisa organizar seu acervo bibliográfico e gerenciar seus empréstimos ativos. 
+
+Precisamos armazenar de forma organizada os dados dos livros, que possuem um título, autor principal, ano de publicação e quantidade total de páginas. 
+
+Os livros são emprestados ou vendidos diretamente para os alunos, que devem apresentar seu número de matrícula único e estar com a situação regular na biblioteca para realizar transações. 
+
+Cada empréstimo deve registrar a data exata de retirada, a data prevista para a devolução, o aluno responsável e a obra correspondente que foi levada."</code></pre>
+                </div>
+            </section>
+
+            <!-- SLIDE 9: As 6 Perguntas Guia -->
+            <section data-transition="slide-in fade-out" id="slide-perguntas-guia">
+                <div class="badge badge-alt">💡 Metodologia</div>
+                <h2>Como Extrair Essas Informações?</h2>
+                <p style="font-size: 0.7em; color: #94a3b8; margin-top: -10px;">Use este roteiro de perguntas para
+                    desvendar as necessidades do cliente:</p>
+
+                <div class="grid-questions">
+                    <div class="question-card">
+                        <span>1. Contextualização</span>
+                        <p>Qual o problema central que a empresa quer resolver no dia a dia?</p>
+                    </div>
+                    <div class="question-card">
+                        <span>2. Atores & Elementos</span>
+                        <p>Quem interage e quais objetos fazem o negócio funcionar?</p>
+                    </div>
+                    <div class="question-card">
+                        <span>3. Atributos</span>
+                        <p>Quais características de cada item/pessoa precisamos salvar?</p>
+                    </div>
+                    <div class="question-card">
+                        <span>4. Filtro de Relevância</span>
+                        <p>Quais dados NÃO importam para o sistema? (evite ruídos)</p>
+                    </div>
+                    <div class="question-card">
+                        <span>5. Regras de Negócio</span>
+                        <p>Como estes elementos interagem e quais são as obrigatoriedades?</p>
+                    </div>
+                    <div class="question-card">
+                        <span>6. Limites (Escopo)</span>
+                        <p>Quais as restrições? Ex: "Um aluno pode levar até 3 livros?"</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 10: Atividade Prática Aula 02 (Vertical) -->
+            <section id="slide-atividade-pratica-02">
+                <section data-transition="slide-in fade-out">
+                    <div class="badge badge-warning">🚀 Mão na Massa</div>
+                    <h2>Atividade Prática: Role-play & IA</h2>
+
+                    <div class="glass-card">
+                        <ol>
+                            <li class="fragment"><strong>Formação das Equipes:</strong> Juntem-se em duplas de trabalho.
+                            </li>
+                            <li class="fragment"><strong>Escolha do Segmento:</strong> Definam um nicho (Pet Shop,
+                                Locadora, E-commerce, Restaurante, etc.).</li>
+                            <li class="fragment"><strong>Entrevista de Requisitos:</strong>
+                                <ul>
+                                    <li><strong>Opção Presencial:</strong> O professor ou colega interpreta o papel de
+                                        cliente.</li>
+                                    <li><strong>Opção Inteligência Artificial:</strong> Carreguem os <strong>System
+                                            Prompts</strong> disponibilizados para simular o cliente.</li>
+                                </ul>
+                            </li>
+                            <li class="fragment"><strong>Rascunho Inicial:</strong> Redijam a primeira versão do
+                                Minimundo.</li>
+                        </ol>
+                    </div>
+                    <div class="navigate-down-indicator">
+                        ▼ Desça para ver os Clientes IA disponíveis
+                    </div>
+                </section>
+
+                <!-- Sub-slide 10.1: Dr. Maurício (DogCat) -->
+                <section data-transition="slide-in" id="cliente-mauricio">
+                    <div class="badge">🐶 Opção 1: Clínica Veterinária "DogCat"</div>
+                    <h3 style="margin-top: 0;">Cliente: Dr. Maurício (Ranzinza e Ocupado)</h3>
+                    <p style="font-size: 0.65em; color: #cbd5e1; margin-bottom: 10px;">
+                        <strong>Perfil:</strong> Um veterinário de ótimo coração, porém sem paciência para jargões de
+                        TI. Diga "Chave Estrangeira" e ele reclamará!
+                    </p>
+                    <div class="editor-box">
+                        <div class="editor-header">
+                            <span class="editor-title">Prompt de Sistema - Dr. Maurício</span>
+                            <span style="font-size: 0.45em; color: var(--emerald);">PROMPT DE IA</span>
+                        </div>
+                        <pre><code class="language-text" data-noescape>Aja como Dr. Maurício, proprietário ranzinza e muito ocupado da clínica DogCat. Você contratou uma dupla de analistas de sistemas para criar o banco de dados do seu negócio, mas você é totalmente leigo em tecnologia. 
+Instruções:
+1. Se usarem jargões de TI (tabelas, campos, FK, chaves primárias), interrompa e peça linguagem simples.
+2. Quer registrar os animais atendidos (nome, espécie, raça, idade), donos (CPF, nome completo, e-mail, telefone), consultas (data, hora, veterinário, sintomas) e vacinas aplicadas (data, nome da vacina, lote).
+3. Comece se apresentando de forma breve e reclamando que o dia está corrido.</code></pre>
+                    </div>
+                </section>
+
+                <!-- Sub-slide 10.2: Mariana (EstiloVibe) -->
+                <section data-transition="slide-in" id="cliente-mariana">
+                    <div class="badge">👗 Opção 2: E-commerce "EstiloVibe"</div>
+                    <h3 style="margin-top: 0;">Cliente: Mariana (Empreendedora Detalhista)</h3>
+                    <p style="font-size: 0.65em; color: #cbd5e1; margin-bottom: 10px;">
+                        <strong>Perfil:</strong> Focada em processos comerciais de venda online. Preocupa-se com a
+                        oscilação de preços de roupas e estoque histórico.
+                    </p>
+                    <div class="editor-box">
+                        <div class="editor-header">
+                            <span class="editor-title">Prompt de Sistema - Mariana</span>
+                            <span style="font-size: 0.45em; color: var(--emerald);">PROMPT DE IA</span>
+                        </div>
+                        <pre><code class="language-text" data-noescape>Aja como Mariana, proprietária exigente e focada em processos da loja EstiloVibe. Você contratou analistas de sistemas para modelar o banco do seu e-commerce.
+Instruções:
+1. Você é leiga. Reclame de termos técnicos de banco de dados.
+2. Cadastro necessário: Clientes (CPF, nome, e-mail, telefone, endereço completo), Produtos (código, nome, descrição, tamanho ex: P/M/G, preço de venda, estoque) e Pedidos (número, data, valor total, status).
+3. REGRA CRÍTICA: Cada pedido pode ter vários produtos. Deve registrar o preço cobrado no ato exato da venda (pois os preços mudam!).
+4. Comece se apresentando e perguntando como eles vão ajudar a organizar as vendas.</code></pre>
+                    </div>
+                </section>
+
+                <!-- Sub-slide 10.3: Roberto (RodaLivre) -->
+                <section data-transition="slide-in" id="cliente-roberto">
+                    <div class="badge">🚗 Opção 3: Locadora "RodaLivre"</div>
+                    <h3 style="margin-top: 0;">Cliente: Roberto (Gerente Frota e Regras)</h3>
+                    <p style="font-size: 0.65em; color: #cbd5e1; margin-bottom: 10px;">
+                        <strong>Perfil:</strong> Extremamente rigoroso e apegado a normas. Não permite nenhum automóvel
+                        transitar sem seguro estruturado.
+                    </p>
+                    <div class="editor-box">
+                        <div class="editor-header">
+                            <span class="editor-title">Prompt de Sistema - Roberto</span>
+                            <span style="font-size: 0.45em; color: var(--emerald);">PROMPT DE IA</span>
+                        </div>
+                        <pre><code class="language-text" data-noescape>Aja como Roberto, gerente rígido e detalhista da locadora RodaLivre. Contratou analistas para modelar o banco de locação de sua frota.
+Instruções:
+1. Peça para explicarem de forma simples caso usem jargões de TI.
+2. Cadastro: Clientes (Pessoa Física: CPF/Nome/CNH ou Jurídica: CNPJ/Razão/CNH motorista; e-mail e telefone), Veículos (placa, modelo, marca, ano, cor, diária por categoria: Econômico/SUV) e Contratos (data retirada, prevista devolução, km saída e retorno, valor final).
+3. REGRA CRÍTICA: Todo carro deve ter uma apólice de seguro associada. Não alugamos sem seguro!
+4. Comece dando boas-vindas corporativas e pedindo as perguntas.</code></pre>
+                    </div>
+                </section>
+
+                <!-- Sub-slide 10.4: Meta-Prompt -->
+                <section data-transition="slide-in" id="meta-prompt">
+                    <div class="badge">🪄 Opção 5: O Meta-Prompt</div>
+                    <h3 style="margin-top: 0;">Gerador Automático de Clientes IA</h3>
+                    <p style="font-size: 0.65em; color: #cbd5e1; margin-bottom: 10px;">
+                        Se a dupla escolher um tema livre, utilize este gerador que perguntará o tema e definirá o
+                        perfil do cliente automaticamente:
+                    </p>
+                    <div class="editor-box" style="margin-top: 5px;">
+                        <pre style="margin: 0;"><code class="language-text" data-noescape style="font-size: 0.8em; max-height: 250px;">"Você é um gerador de personagens para simulações de engenharia de requisitos. Sua tarefa é atuar como o cliente de um projeto de banco de dados. 
+Antes de iniciar a simulação, pergunte-me:
+1. Qual é o ramo de atividade da empresa escolhida pela minha dupla?
+2. Qual o nome fictício da empresa?
+3. Qual o nível de dificuldade/personalidade do cliente? (Colaborativo, Ocupado, Ranzinza, Leigo)
+Depois de eu responder, crie o personagem e inicie agindo como ele..."</code></pre>
+                    </div>
+                </section>
+            </section>
+
+
+            <!-- ==================== PARTE 2: AULA 03 ==================== -->
+
+            <!-- SLIDE 11: Capa Aula 03 -->
+            <section data-transition="zoom" id="slide-capa-03">
+                <div class="badge">UC3 - Modelar e Estruturar Banco de Dados</div>
+                <h1>Versionamento, Auditoria e Homologação</h1>
+                <p style="font-size: 0.78em; color: #94a3b8; margin-bottom: 25px;">
+                    Markdown, Git/GitHub, Peer Review e Resolução de Gaps nos Requisitos
+                </p>
+                <div class="glass-card" style="text-align: center; max-width: 600px;">
+                    <p style="margin: 0; font-size: 0.68em; font-weight: 600; color: #cbd5e1;">
+                        🧑‍🏫 Prof. Haroldo Curti &nbsp;|&nbsp; 📅 29/06/2026 &nbsp;|&nbsp; 🏫 Aula 03
+                    </p>
+                </div>
+            </section>
+
+            <!-- SLIDE 12: Objetivos Aula 03 -->
+            <section data-transition="slide-in fade-out" id="slide-objetivos-03">
+                <div class="badge badge-alt">🎯 Objetivos de Hoje</div>
+                <h2>Ciclo de Qualidade de Requisitos</h2>
+                <div class="glass-card">
+                    <p>Nesta segunda etapa de modelagem, as duplas vão:</p>
+                    <ul style="margin-top: 10px;">
+                        <li class="fragment"><strong>Estruturar em Markdown:</strong> Transcrever e organizar o
+                            Minimundo coletado em um arquivo formatado <code>minimundo.md</code>.</li>
+                        <li class="fragment"><strong>Controlar Versões com Git:</strong> Compartilhar, commitar e
+                            versionar os requisitos em um repositório GitHub.</li>
+                        <li class="fragment"><strong>Auditar Requisitos Alheios:</strong> Atuar como equipe de qualidade
+                            analisando e abrindo <em>Issues</em> nos projetos parceiros.</li>
+                        <li class="fragment"><strong>Homologar o Escopo:</strong> Sanar lacunas de lógica mapeadas,
+                            preparando o documento como "contrato" de modelagem.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- SLIDE 13: A Importância da Validação -->
+            <section data-transition="slide-in fade-out" id="slide-importancia-validacao">
+                <div class="badge badge-warning">⚠️ Prevenção de Erros</div>
+                <h2>A Importância da Validação</h2>
+
+                <div class="quote-box" style="border-left-color: var(--amber); background: rgba(255, 158, 0, 0.02);">
+                    <p style="color: #ffffff;">"Furos de lógica na modelagem inicial geram retrabalho gigante no final
+                        do projeto."</p>
+                </div>
+
+                <div class="glass-card" style="margin-top: 15px;">
+                    <p style="font-size: 0.72em; margin-bottom: 5px;">Muitas vezes o cliente assume regras implícitas ou
+                        esquece de detalhes. Precisamos testar os limites do Minimundo com perguntas do tipo:</p>
+                    <div class="cols">
+                        <div class="col" style="padding: 10px; background: rgba(255, 255, 255, 0.02);">
+                            <p style="font-size: 0.65em; margin: 0; color: var(--emerald); font-weight: 600;">🔄 Ciclo
+                                de Vida</p>
+                            <p style="font-size: 0.58em; margin: 0; color: #94a3b8;">"O que ocorre se o cliente cancelar
+                                este pedido?"</p>
+                        </div>
+                        <div class="col" style="padding: 10px; background: rgba(255, 255, 255, 0.02);">
+                            <p style="font-size: 0.65em; margin: 0; color: var(--emerald); font-weight: 600;">🔒
+                                Unicidade</p>
+                            <p style="font-size: 0.58em; margin: 0; color: #94a3b8;">"Podemos ter mais de um veículo com
+                                a mesma placa?"</p>
+                        </div>
+                        <div class="col" style="padding: 10px; background: rgba(255, 255, 255, 0.02);">
+                            <p style="font-size: 0.65em; margin: 0; color: var(--emerald); font-weight: 600;">💥
+                                Exceções</p>
+                            <p style="font-size: 0.58em; margin: 0; color: #94a3b8;">"Como registramos multas ou avarias
+                                na devolução?"</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 14: Ferramentas do Desenvolvedor -->
+            <section data-transition="slide-in fade-out" id="slide-ferramentas-dev">
+                <div class="badge badge-alt">🛠️ Caixa de Ferramentas</div>
+                <h2>Ferramentas do Desenvolvedor</h2>
+                <p style="font-size: 0.7em; color: #94a3b8; margin-top: -10px; margin-bottom: 10px;">Como estruturamos e
+                    testamos a especificação de software moderno</p>
+
+                <div class="cols">
+                    <div class="col fragment">
+                        <h3>📝 Markdown</h3>
+                        <p style="margin-bottom: 5px;">Escrita do arquivo <code>minimundo.md</code> de forma limpa,
+                            estruturada e nativa para o GitHub.</p>
+                        <code style="font-size: 0.7em; color: var(--emerald);"># Título<br>- Item 1<br>- Item 2</code>
+                    </div>
+                    <div class="col fragment">
+                        <h3>🐙 Git & GitHub</h3>
+                        <p style="margin-bottom: 5px;">Controle de versões e ramificações. Compartilhamento do arquivo
+                            fonte da especificação entre a dupla de analistas.</p>
+                        <code style="font-size: 0.7em; color: var(--teal);">git commit -m "docs..."</code>
+                    </div>
+                    <div class="col fragment">
+                        <h3>🚩 GitHub Issues</h3>
+                        <p style="margin-bottom: 5px;">Centralizador profissional de debates e apontamentos. Usado para
+                            documentar bugs e furos identificados nos requisitos.</p>
+                        <code style="font-size: 0.7em; color: var(--violet);">Issue #4: "Falta regra..."</code>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 15: Auditoria Cruzada -->
+            <section data-transition="slide-in fade-out" id="slide-auditoria-cruzada">
+                <div class="badge badge-warning">🕵️ Dinâmica Colaborativa</div>
+                <h2>Auditoria Cruzada (Peer Review)</h2>
+                <p style="font-size: 0.7em; color: #94a3b8; margin-top: -10px; margin-bottom: 10px;">Sua equipe de
+                    desenvolvimento atuará hoje como o time de QA (Garantia de Qualidade):</p>
+
+                <div class="glass-card">
+                    <ol>
+                        <li class="fragment"><strong>Acesse o Repositório:</strong> Entre no GitHub correspondente à
+                            dupla que você foi encarregado de auditar.</li>
+                        <li class="fragment"><strong>Analise o <code>minimundo.md</code>:</strong> Leia atentamente e
+                            procure por contradições lógicas, ambiguidade ou regras não explicadas.</li>
+                        <li class="fragment"><strong>Abra GitHub Issues:</strong> Registre profissionalmente pelo menos
+                            <strong>2 Issues</strong> detalhando estas vulnerabilidades identificadas.</li>
+                        <li class="fragment highlight-accent"><strong>Auditoria Docente:</strong> O professor também
+                            auditará os arquivos de requisitos, abrindo Issues técnicas críticas!</li>
+                    </ol>
+                </div>
+            </section>
+
+            <!-- SLIDE 16: Tratamento de Gaps (Como resolver as issues?) -->
+            <section data-transition="slide-in fade-out" id="slide-tratamento-gaps">
+                <div class="badge badge-alt">🔧 Resolução de Problemas</div>
+                <h2>Como Resolver as Issues Recebidas?</h2>
+                <p style="font-size: 0.7em; color: #94a3b8; margin-top: -10px; margin-bottom: 10px;">Ao receber
+                    apontamentos em seu repositório, você tem dois caminhos profissionais:</p>
+
+                <div class="cols">
+                    <div class="col fragment" style="border-top: 4px solid var(--emerald);">
+                        <h3 style="color: var(--emerald);">🟢 Opção A: Dentro do Escopo</h3>
+                        <p style="font-size: 0.65em;">Se o apontamento faz todo sentido e é essencial para o
+                            funcionamento do negócio:</p>
+                        <ol style="font-size: 0.58em; margin-left: 15px;">
+                            <li>Ajustem o texto do <code>minimundo.md</code> no Git.</li>
+                            <li>Façam o commit citando o número da Issue no comentário:</li>
+                        </ol>
+                        <pre
+                            style="margin-top: 5px;"><code class="language-bash" style="font-size: 0.75em;">git commit -m "Ajusta cancelamento. fecha #2"</code></pre>
+                        <p style="font-size: 0.55em; color: #94a3b8; margin-top: 5px;">💡 Isso atualizará o arquivo e
+                            encerrará a Issue no GitHub de forma automatizada!</p>
+                    </div>
+
+                    <div class="col fragment" style="border-top: 4px solid var(--violet);">
+                        <h3 style="color: var(--violet);">🟣 Opção B: Fora do Escopo</h3>
+                        <p style="font-size: 0.65em;">Se o apontamento for muito complexo ou desnecessário para esta
+                            fase do projeto:</p>
+                        <ol style="font-size: 0.58em; margin-left: 15px;">
+                            <li>Responda à Issue aberta no GitHub justificando sua decisão de forma profissional.</li>
+                            <li>Explique que a funcionalidade foi classificada como fora do escopo inicial da V1.0.</li>
+                            <li>Feche a Issue manualmente justificando a recusa.</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 17: Minimundo Homologado -->
+            <section data-transition="slide-in fade-out" id="slide-homologacao">
+                <div class="badge badge-warning">🏁 O Contrato Final</div>
+                <h2>Minimundo Homologado!</h2>
+
+                <div class="glass-card">
+                    <p style="font-size: 0.85em; font-weight: 500;">
+                        No término desta sessão de trabalho, sua dupla deve atingir os seguintes entregáveis:
+                    </p>
+                    <ul style="font-size: 0.72em;">
+                        <li class="fragment">O arquivo <code>minimundo.md</code> estruturado, completo e refinado na
+                            raiz do repositório remoto.</li>
+                        <li class="fragment">Todas as GitHub Issues (abertas pelos colegas e pelo docente) respondidas e
+                            encerradas de forma limpa.</li>
+                    </ul>
+                    <hr style="border: 0; border-top: 1px solid var(--glass-border); margin: 15px 0;">
+                    <p style="font-size: 0.75em; color: var(--emerald);">
+                        📌 <strong>Este documento validado e assinado é o contrato do projeto.</strong> Ele será o guia
+                        exclusivo que usaremos na próxima aula para traçar o Diagrama Entidade-Relacionamento (DER).
+                    </p>
+                </div>
+            </section>
+
+            <!-- SLIDE 18: Resumo de Comandos / Conceitos -->
+            <section data-transition="zoom" id="slide-resumo-comandos">
+                <div class="badge">🧰 Guia Rápido</div>
+                <h2>Resumo da Dinâmica de Desenvolvimento</h2>
+
+                <div class="glass-card" style="padding: 10px 20px;">
+                    <table style="margin: 0; font-size: 0.5em;">
+                        <thead>
+                            <tr>
+                                <th>Conceito / Ação</th>
+                                <th>Significado / Efeito Prático</th>
+                                <th>O que evitar no documento?</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Minimundo</strong></td>
+                                <td>Descrição em linguagem natural e fluida do escopo do projeto.</td>
+                                <td>Evitar termos técnicos de banco de dados (tabela, chaves).</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Markdown</strong></td>
+                                <td>Estilo e marcação leve para documentar requisitos de forma legível.</td>
+                                <td>Evitar textos corridos sem títulos ou listas organizadas.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>GitHub Issues</strong></td>
+                                <td>Auditores registram furos e pontos cegos na especificação da equipe parceira.</td>
+                                <td>Evitar linguajar informal ou comentários não técnicos/críticas destrutivas.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Homologação</strong></td>
+                                <td>Acordo final sobre o escopo que impede retrabalho durante a modelagem física.</td>
+                                <td>Evitar iniciar códigos ou modelagem DER sem fechar o Minimundo.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3 style="text-align: center; margin-top: 15px; font-size: 0.8em; animation: pulse-glow 2s infinite;">
+                    🚀 Preparados para auditar e blindar seus requisitos? Mãos à obra!
+                </h3>
+                <style>
+                    @keyframes pulse-glow {
+                        0% {
+                            opacity: 0.6;
+                            transform: scale(0.98);
+                        }
+
+                        50% {
+                            opacity: 1;
+                            color: var(--emerald);
+                            transform: scale(1.02);
+                        }
+
+                        100% {
+                            opacity: 0.6;
+                            transform: scale(0.98);
+                        }
+                    }
+                </style>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/highlight/highlight.min.js"></script>
+    <script>
+        // Inicialização com dimensões otimizadas para escala automática e menor margem
+        Reveal.initialize({
+            controls: true,
+            progress: true,
+            center: true,
+            hash: true,
+            width: 1024,
+            height: 680,
+            margin: 0.04,
+            minScale: 0.2,
+            maxScale: 2.0,
+            transition: 'slide',
+            backgroundTransition: 'fade',
+            plugins: [RevealHighlight]
+        });
+    </script>
+</body>
+
+</html>
