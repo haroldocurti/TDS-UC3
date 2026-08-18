@@ -38,6 +38,15 @@ Acompanhe os guias detalhados de cada encontro da UC3:
 - **[Aula 06 (04/08/2026)](Guia_de_aulas/Guia_Aluno_Aula06.md): Roteiro Prático de SQL — O Universo dos Games Retrô (DDL e DML)**  
   Construção e manipulação na prática do banco de dados *Retro-Vault*. Aplicação de comandos DDL (`CREATE`, `ALTER`), DML (`INSERT`, `UPDATE`), chaves estrangeiras (`FOREIGN KEY`) e escolha estratégica de charset (`utf8mb4`).
 
+- **[Aula 08 (10/08/2026)](Guia_de_aulas/Guia_Aluno_Aula08.md): Prática Intensiva de SQL — Consultas, Agregações e Junções Relacionais**  
+  Consultas analíticas com filtros avançados (`WHERE`, `LIKE`, `BETWEEN`), funções agregadas (`COUNT`, `SUM`, `AVG`, `MAX`, `MIN`), agrupamento de dados (`GROUP BY`, `HAVING`) e junções multi-tabelas (`INNER JOIN`).
+
+- **[Aula 09 (11/08/2026)](Guia_de_aulas/Guia_Aluno_Aula09.md): Retomada Prática e Fixação dos Conceitos da Aula 06**  
+  Nivelamento e consolidação de bancada sobre criação de tabelas pai e filha, chaves estrangeiras (`FOREIGN KEY`), evolução de esquema (`ALTER TABLE`), simulação de violação de integridade referencial (Erro 1451) e comparação entre `TRUNCATE` e `DELETE`.
+
+- **[Aula 10 (17/08/2026)](Guia_de_aulas/Guia_Aluno_Aula10.md): Materialização Física dos Projetos Integradores — Criando as Tabelas dos Projetos no MySQL**  
+  Criação física das bases de dados e execução dos scripts DDL com as tabelas, tipos de dados e constraints dos Projetos Integradores desenvolvidos nas aulas do Prof. Facine.
+
 ---
 
 ## 📚 Biblioteca de Apoio e Materiais Complementares
