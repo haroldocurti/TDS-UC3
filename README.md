@@ -38,14 +38,17 @@ Acompanhe os guias detalhados de cada encontro da UC3:
 - **[Aula 06 (04/08/2026)](Guia_de_aulas/Guia_Aluno_Aula06.md): Roteiro Prático de SQL — O Universo dos Games Retrô (DDL e DML)**  
   Construção e manipulação na prática do banco de dados *Retro-Vault*. Aplicação de comandos DDL (`CREATE`, `ALTER`), DML (`INSERT`, `UPDATE`), chaves estrangeiras (`FOREIGN KEY`) e escolha estratégica de charset (`utf8mb4`).
 
-- **[Aula 08 (10/08/2026)](Guia_de_aulas/Guia_Aluno_Aula08.md): Prática Intensiva de SQL — Consultas, Agregações e Junções Relacionais**  
-  Consultas analíticas com filtros avançados (`WHERE`, `LIKE`, `BETWEEN`), funções agregadas (`COUNT`, `SUM`, `AVG`, `MAX`, `MIN`), agrupamento de dados (`GROUP BY`, `HAVING`) e junções multi-tabelas (`INNER JOIN`).
+- **[Aula 08 (10/08/2026)](Guia_de_aulas/Guia_Aluno_Aula08.md): Oficina Prática de Estruturação e Manipulação em MySQL (DDL e DML)**  
+  Criação de esquemas relacionais, gestão de constraints e chaves estrangeiras, evolução com `ALTER TABLE` e operações de carga e manutenção com `INSERT`, `UPDATE`, `DELETE` e `TRUNCATE`.
 
 - **[Aula 09 (11/08/2026)](Guia_de_aulas/Guia_Aluno_Aula09.md): Retomada Prática e Fixação dos Conceitos da Aula 06**  
   Nivelamento e consolidação de bancada sobre criação de tabelas pai e filha, chaves estrangeiras (`FOREIGN KEY`), evolução de esquema (`ALTER TABLE`), simulação de violação de integridade referencial (Erro 1451) e comparação entre `TRUNCATE` e `DELETE`.
 
 - **[Aula 10 (17/08/2026)](Guia_de_aulas/Guia_Aluno_Aula10.md): Materialização Física dos Projetos Integradores — Criando as Tabelas dos Projetos no MySQL**  
   Criação física das bases de dados e execução dos scripts DDL com as tabelas, tipos de dados e constraints dos Projetos Integradores desenvolvidos nas aulas do Prof. Facine.
+
+- **[Aula 11 (18/08/2026)](Guia_de_aulas/Guia_Aluno_Aula11.md): Consultas Relacionais em SQL (DQL) e Análise de Dados — Estudo de Caso TechStore Brasil**  
+  Recuperação com `SELECT`/`FROM`/`WHERE`, filtros avançados (`BETWEEN`, `IN`, `LIKE`), ordenação e limites (`ORDER BY`, `LIMIT`), funções de agregação (`COUNT`, `SUM`, `AVG`, `MIN`, `MAX`), agrupamentos e filtros de grupos (`GROUP BY`, `HAVING`), junções relacionais (`INNER JOIN`, `LEFT JOIN` com `IS NULL`) e resolução de 15 chamados corporativos no estudo de caso *TechStore Brasil*.
 
 ---
 
@@ -55,6 +58,7 @@ Consulte os arquivos na pasta **[Biblioteca/](Biblioteca/)** para aprofundar seu
 
 | Arquivo | Formato | Descrição |
 | --- | --- | --- |
+| `loja_teste_completo.sql` | Script SQL | Script consolidado (DDL + DML) do banco de dados `loja_teste` da TechStore Brasil (clientes, produtos, pedidos e itens). |
 | `Comandos DDL do MySQL.pdf` | Documento PDF | Guia de referência rápida para comandos de definição de dados (`CREATE`, `ALTER`, `DROP`). |
 | `Comandos DML em MySQL.pdf` | Documento PDF | Manual prático para inserção, atualização e consulta de dados (`INSERT`, `UPDATE`, `DELETE`, `SELECT`). |
 | `Constraints de Tabela no MySQL_ Funções e Exemplos.pdf` | Documento PDF | Explicação sobre restrições de integridade (`PRIMARY KEY`, `FOREIGN KEY`, `NOT NULL`, `UNIQUE`, `CHECK`). |

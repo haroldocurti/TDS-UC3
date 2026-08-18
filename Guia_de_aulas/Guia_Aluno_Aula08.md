@@ -1,6 +1,6 @@
-# Guia da Aula 08: Prática Intensiva de SQL — Consultas, Agregações e Junções Relacionais (10/08/2026)
+# Guia da Aula 08: Oficina Prática de Estruturação e Manipulação em MySQL (DDL e DML) (10/08/2026)
 
-Olá! Após construirmos as primeiras tabelas e relacionamentos em MySQL, hoje vamos expandir nosso domínio sobre a linguagem SQL! Vamos explorar consultas analíticas poderosas com filtros avançados, funções de agregação (`COUNT`, `SUM`, `AVG`, `MAX`, `MIN`), agrupamento de dados com `GROUP BY` e junções entre tabelas via `INNER JOIN`! 📊🔍
+Olá! Hoje dedicamos nossa aula à prática intensiva de **Definição de Dados (DDL)** e **Manipulação de Dados (DML)** no MySQL! Vamos dominar a construção física de tabelas, chaves primárias e estrangeiras, modificações estruturais com `ALTER TABLE`, inserções, atualizações com `UPDATE`, exclusões seguras e análise do comportamento do banco com `TRUNCATE` vs `DELETE`! 🛠️💾
 
 ---
 
@@ -8,9 +8,9 @@ Olá! Após construirmos as primeiras tabelas e relacionamentos em MySQL, hoje v
 
 | Pilares da Competência | Detalhamento Pedagógico (MPS) |
 | --- | --- |
-| **Elemento de Competência** | **Saber-Fazer**: Elaborar scripts SQL de manipulação, agregação e consulta relacional (Indicador 6). |
-| **Marcas Formativas** | **Domínio Técnico-Científico**: Rigor na utilização da sintaxe SQL, tipagem e funções analíticas.<br>**Visão Crítica**: Análise da precisão das consultas e integridade dos resultados retornados. |
-| **Dinâmica Metodológica** | **Ação-Reflexão-Ação**: Execução prática de desafios com complexidade progressiva e validação imediata no SGBD. |
+| **Elemento de Competência** | **Saber-Fazer**: Elaborar scripts SQL de criação, alteração e manipulação de dados (Indicador 6). |
+| **Marcas Formativas** | **Domínio Técnico-Científico**: Rigor na tipagem física, declaração de constraints e integridade de FKs.<br>**Visão Crítica**: Análise de impacto de operações estruturais e prevenção de perda de dados. |
+| **Dinâmica Metodológica** | **Ação-Reflexão-Ação**: Prática guiada em bancada, simulação de erros reais do SGBD e consolidação de boas práticas. |
 
 ---
 
@@ -18,104 +18,125 @@ Olá! Após construirmos as primeiras tabelas e relacionamentos em MySQL, hoje v
 
 Acesse a aba **SQL** do seu banco de dados individual no phpMyAdmin e execute os desafios passo a passo:
 
-### 🎯 Desafio 1: Filtros Condicionais Avançados (DQL)
+### 🛠️ Desafio 1: Construção Estruturada com Chaves Primárias e Estrangeiras (DDL)
 
-Filtre registros utilizando operadores lógicos e condicionais no catálogo da Retro-Vault:
+Crie o banco de dados e as tabelas pai e filha com integridade referencial:
 
 ```sql
-USE db_retro_games;
+SET NAMES utf8mb4;
 
--- 1. Buscar jogos lançados entre 1990 e 1995 ordenados pelo ano (mais antigo primeiro)
-SELECT id_jogo, titulo, ano_lanc, preco 
-FROM jogos 
-WHERE ano_lanc BETWEEN 1990 AND 1995 
-ORDER BY ano_lanc ASC;
+DROP DATABASE IF EXISTS db_laboratorio_pratico;
+CREATE DATABASE db_laboratorio_pratico 
+  CHARACTER SET utf8mb4 
+  COLLATE utf8mb4_unicode_ci;
 
--- 2. Buscar jogos com preço superior a R$ 200,00 ou nota Metacritic maior que 9.0
-SELECT titulo, preco, nota_metacritic 
-FROM jogos 
-WHERE preco > 200.00 OR nota_metacritic > 9.0;
+USE db_laboratorio_pratico;
 
--- 3. Buscar desenvolvedoras cujo nome comece com a letra 'S' ou termine com 'a'
-SELECT * 
-FROM desenvolvedoras 
-WHERE nome LIKE 'S%' OR nome LIKE '%a';
+-- Tabela Pai 1: Categorias
+CREATE TABLE categorias (
+    id_categoria INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(80) NOT NULL UNIQUE,
+    descricao VARCHAR(200)
+) ENGINE=InnoDB;
+
+-- Tabela Pai 2: Fornecedores
+CREATE TABLE fornecedores (
+    id_fornecedor INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    razao_social VARCHAR(120) NOT NULL UNIQUE,
+    cidade VARCHAR(80) NOT NULL,
+    estado CHAR(2) NOT NULL DEFAULT 'SP'
+) ENGINE=InnoDB;
+
+-- Tabela Filha: Produtos (com FKs vinculadas aos pais)
+CREATE TABLE produtos (
+    id_produto INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(120) NOT NULL,
+    preco DECIMAL(10,2) NOT NULL,
+    estoque INT NOT NULL DEFAULT 0,
+    id_categoria INT UNSIGNED NOT NULL,
+    id_fornecedor INT UNSIGNED NOT NULL,
+    CONSTRAINT fk_categoria_prod FOREIGN KEY (id_categoria) REFERENCES categorias(id_categoria),
+    CONSTRAINT fk_fornecedor_prod FOREIGN KEY (id_fornecedor) REFERENCES fornecedores(id_fornecedor)
+) ENGINE=InnoDB;
 ```
 
 ---
 
-### 📊 Desafio 2: Funções de Agregação e Estatísticas de Dados
+### 🧬 Desafio 2: Modificações de Esquema sem Perda de Dados (`ALTER TABLE`)
 
-Extraia métricas do banco de dados utilizando funções agregadas:
+Pratique a evolução da estrutura da tabela:
 
 ```sql
--- 1. Contar o total de jogos cadastrados
-SELECT COUNT(*) AS total_jogos FROM jogos;
+-- 1. Adicionar uma nova coluna com restrição CHECK para nota de avaliação
+ALTER TABLE produtos 
+ADD COLUMN avaliacao DECIMAL(3,1) CHECK (avaliacao BETWEEN 0.0 AND 10.0);
 
--- 2. Calcular o valor médio, preço máximo e preço mínimo dos jogos
-SELECT 
-    AVG(preco) AS preco_medio,
-    MAX(preco) AS preco_mais_caro,
-    MIN(preco) AS preco_mais_barato
-FROM jogos;
+-- 2. Modificar o tamanho e valor padrão de uma coluna existente
+ALTER TABLE fornecedores 
+MODIFY COLUMN cidade VARCHAR(100) DEFAULT 'Não Informada';
 
--- 3. Calcular o valor total do catálogo (soma de todos os preços)
-SELECT SUM(preco) AS patrimonio_total_catalogo FROM jogos;
+-- 3. Adicionar e remover coluna temporária de teste
+ALTER TABLE produtos ADD COLUMN campo_temporario VARCHAR(20);
+ALTER TABLE produtos DROP COLUMN campo_temporario;
 ```
 
 ---
 
-### 🧩 Desafio 3: Agrupamentos com `GROUP BY` e Filtros de Grupo com `HAVING`
+### 📥 Desafio 3: Povoamento Ordenado e Atualização de Dados (DML)
 
-Agrupe os dados para gerar relatórios consolidados:
+Insira registros respeitando a precedência de chaves e pratique atualizações pontuais:
 
 ```sql
--- 1. Quantidade de jogos e preço médio por console
-SELECT 
-    c.nome_console,
-    COUNT(j.id_jogo) AS total_jogos,
-    AVG(j.preco) AS media_preco
-FROM consoles c
-LEFT JOIN jogos j ON c.id_console = j.id_console
-GROUP BY c.id_console, c.nome_console;
+-- 1. Povoando tabelas pais
+INSERT INTO categorias (nome, descricao) VALUES 
+('Hardware', 'Componentes físicos e periféricos'),
+('Acessórios', 'Itens complementares e cabos');
 
--- 2. Desenvolvedoras que possuem jogos com média de nota superior a 9.0
-SELECT 
-    d.nome AS desenvolvedora,
-    AVG(j.nota_metacritic) AS media_nota
-FROM desenvolvedoras d
-INNER JOIN jogos j ON d.id_desenv = j.id_desenv
-GROUP BY d.id_desenv, d.nome
-HAVING media_nota >= 9.0;
+INSERT INTO fornecedores (razao_social, cidade, estado) VALUES 
+('Tech Distribuidora SP', 'São Paulo', 'SP'),
+('Sul Componentes', 'Curitiba', 'PR');
+
+-- 2. Povoando tabela filha
+INSERT INTO produtos (nome, preco, estoque, id_categoria, id_fornecedor, avaliacao) VALUES 
+('Teclado Mecânico RGB', 280.00, 15, 1, 1, 9.5),
+('Mouse Sem Fio 1600DPI', 95.00, 30, 2, 1, 8.8),
+('Monitor 27 Pol 144Hz', 1250.00, 8, 1, 2, 9.8);
+
+-- 3. Atualização direcionada de preço e estoque (DML)
+UPDATE produtos 
+SET preco = 269.90, estoque = 12 
+WHERE id_produto = 1;
 ```
 
 ---
 
-### 🔗 Desafio 4: Consultas com Múltiplos `JOIN`s e Apelidos (Aliases)
-
-Construa um relatório completo consolidando todas as entidades do banco:
+### 💥 Desafio 4: Teste de Violação de Chave Estrangeira e Análise de Deleção
 
 ```sql
-SELECT 
-    j.id_jogo AS Codigo,
-    j.titulo AS Titulo_Jogo,
-    c.nome_console AS Plataforma,
-    d.nome AS Estúdio,
-    d.nacionalidade AS Origem_Estudio,
-    CONCAT('R$ ', FORMAT(j.preco, 2, 'pt_BR')) AS Preco_Formatado,
-    j.nota_metacritic AS Nota_Critica
-FROM jogos j
-INNER JOIN consoles c ON j.id_console = c.id_console
-INNER JOIN desenvolvedoras d ON j.id_desenv = d.id_desenv
-ORDER BY j.nota_metacritic DESC;
+-- 1. Teste de Integridade Referencial (Provocação Pedagógica):
+-- DELETE FROM categorias WHERE id_categoria = 1;
+-- 💥 ERRO 1451: O MySQL impede a deleção da categoria 1 porque existem produtos vinculados a ela!
+
+-- 2. Comparativo Prático: TRUNCATE vs DELETE
+CREATE TABLE produtos_backup LIKE produtos;
+INSERT INTO produtos_backup SELECT * FROM produtos;
+
+-- DDL: Limpeza total ultra-rápida e reinício do AUTO_INCREMENT
+TRUNCATE TABLE produtos_backup;
+
+-- DML: Exclusão de registro específico mantendo o contador da sequência
+DELETE FROM produtos WHERE id_produto = 2;
+
+-- Inserir novo produto e observar o próximo ID gerado (será o ID 4)
+INSERT INTO produtos (nome, preco, estoque, id_categoria, id_fornecedor, avaliacao) 
+VALUES ('Headset USB 7.1', 220.00, 20, 2, 1, 9.0);
 ```
 
 ---
 
-## 🧰 Dicas de Bancada (Boas Práticas SQL)
+## 🧰 Dicas de Bancada
 
-*   **`COUNT(*)` vs `COUNT(coluna)`:** `COUNT(*)` conta todas as linhas retornadas pela consulta, enquanto `COUNT(coluna)` ignora valores `NULL` naquela coluna específica.
-*   **`WHERE` vs `HAVING`:** O `WHERE` filtra linhas **antes** do agrupamento. O `HAVING` filtra os resultados agregados **depois** do `GROUP BY`.
-*   **Aliases com `AS`:** Sempre nomeie colunas calculadas com apelidos claros para facilitar a leitura e o consumo por aplicações backend.
+*   **Sempre use `WHERE` no `UPDATE` e `DELETE`:** Sem a cláusula `WHERE`, todos os registros da tabela serão alterados ou apagados!
+*   **Idempotência:** Garanta que seu script possa ser reexecutado do zero sem apresentar erros de "tabela já existente".
 
-Bons estudos e continue praticando suas consultas no phpMyAdmin! 🚀💾
+Excelente prática de DDL e DML! 🚀💾

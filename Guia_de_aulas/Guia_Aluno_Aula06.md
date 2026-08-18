@@ -162,22 +162,10 @@ INSERT INTO jogos (titulo, ano_lanc, preco, id_desenv, id_console, nota_metacrit
 
 ---
 
-### 🔍 Desafio 3: Otimização e Refatoração (DQL e DDL)
+### 🔍 Desafio 3: Otimização de Performance e Índices (DDL)
 
 ```sql
--- DQL: Consulta de validação e junção dos dados das 3 tabelas
-SELECT 
-    j.id_jogo,
-    j.titulo, 
-    c.nome_console, 
-    d.nome AS desenvolvedora,
-    j.preco,
-    j.nota_metacritic
-FROM jogos j
-INNER JOIN consoles c ON j.id_console = c.id_console
-INNER JOIN desenvolvedoras d ON j.id_desenv = d.id_desenv;
-
--- DDL: Criando índice secundário para acelerar buscas frequentes no título do jogo
+-- DDL: Criando índice secundário para acelerar a busca futura no título do jogo
 CREATE INDEX idx_jogos_titulo ON jogos(titulo);
 ```
 
