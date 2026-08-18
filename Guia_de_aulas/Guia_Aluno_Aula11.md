@@ -105,51 +105,80 @@ HAVING media_preco > 100.00;
 
 ### 🔗 3.3 Relacionamentos e Junções: `INNER JOIN`, `LEFT JOIN` e Junções Múltiplas
 
-Em bancos relacionais, os dados estão distribuídos em tabelas conectadas por **Chaves Primárias (PK)** e **Chaves Estrangeiras (FK)**. Para cruzar essas informações em uma única visão, utilizamos os `JOIN`s:
+Em bancos de dados relacionais, as informações ficam organizadas em tabelas separadas para evitar redundâncias, conectando-se por meio de **Chaves Primárias (PK)** e **Chaves Estrangeiras (FK)**.
+
+Para cruzar dados de tabelas diferentes em uma única consulta, utilizamos a cláusula **`JOIN`**.
+
+> 💡 **Regra de Clareza: A Notação `tabela.coluna`**  
+> Quando consultamos duas ou mais tabelas juntas, várias tabelas podem ter colunas com o mesmo nome (por exemplo, o campo `id` existe tanto na tabela `clientes` quanto na tabela `pedidos`).  
+> Para evitar ambiguidade e deixar o código 100% legível, sempre identificamos a coluna informando o nome completo da tabela antes do ponto:  
+> **`nome_da_tabela.nome_da_coluna`** (exemplo: `clientes.id`, `pedidos.id`, `produtos.nome`).
+
+---
 
 #### 1. `INNER JOIN` (Interseção Exata)
-Retorna **apenas** os registros que possuem correspondência mútua em ambas as tabelas:
+O `INNER JOIN` retorna **apenas** os registros que possuem correspondência mútua entre as tabelas (ou seja, pedidos que realmente possuem um cliente associado).
+
+**Anatomia do Comando:**
+* `FROM clientes`: Define a tabela principal de partida.
+* `INNER JOIN pedidos`: Indica a tabela que queremos conectar.
+* `ON clientes.id = pedidos.cliente_id`: É a ponte de ligação! Diz ao MySQL que o `id` (chave primária) de `clientes` deve coincidir com o `cliente_id` (chave estrangeira) gravado em `pedidos`.
 
 ```sql
 SELECT 
-    c.nome AS cliente,
-    p.id AS id_pedido,
-    p.data_pedido
-FROM clientes c
-INNER JOIN pedidos p ON c.id = p.cliente_id;
+    clientes.nome AS nome_do_cliente,
+    pedidos.id AS numero_do_pedido,
+    pedidos.data_pedido
+FROM clientes
+INNER JOIN pedidos ON clientes.id = pedidos.cliente_id;
 ```
 
-#### 2. `LEFT JOIN` e o Padrão `IS NULL` (Preservação à Esquerda e Detecção de Inativos)
-O `LEFT JOIN` preserva **todos** os registros da tabela principal (à esquerda), mesmo que não haja correspondência na tabela secundária (preenchendo com `NULL`). Quando filtramos por `WHERE tabela_direita.id IS NULL`, identificamos com precisão entidades órfãs ou sem movimentação (ex: clientes cadastrados que nunca compraram nada):
+---
+
+#### 2. `LEFT JOIN` e o Padrão `IS NULL` (Detecção de Inativos e Dados sem Movimento)
+O `LEFT JOIN` preserva **todas** as linhas da tabela da esquerda (`clientes`), mesmo aquelas que **não possuem nenhum registro** na tabela da direita (`pedidos`).  
+Quando um cliente nunca fez compras, o campo `pedidos.id` virá preenchido como `NULL` (vazio).
+
+Dessa forma, ao combinarmos o `LEFT JOIN` com `WHERE pedidos.id IS NULL`, conseguimos localizar com extrema precisão os **clientes inativos** que nunca compraram nada:
 
 ```sql
 SELECT 
-    c.nome,
-    c.email
-FROM clientes c
-LEFT JOIN pedidos p ON c.id = p.cliente_id
-WHERE p.id IS NULL;
+    clientes.nome,
+    clientes.email
+FROM clientes
+LEFT JOIN pedidos ON clientes.id = pedidos.cliente_id
+WHERE pedidos.id IS NULL;
 ```
 
-#### 3. Junções Múltiplas em Cadeia (Fluxo Completo)
-Podemos conectar quantas tabelas forem necessárias encadeando os `JOIN`s pela sua chave de ligação:
+---
+
+#### 3. Junções Múltiplas em Cadeia (Reconstruindo o Fluxo Completo da Compra)
+Podemos encadear quantos `JOIN`s forem necessários, seguindo passo a passo a cadeia de relacionamentos definida na modelagem:
 
 ```text
-clientes (id) ➔ pedidos (cliente_id / id) ➔ itens_pedido (pedido_id / produto_id) ➔ produtos (id)
+clientes (id) 
+    ⬇️ conecta com
+pedidos (cliente_id / id) 
+    ⬇️ conecta com
+itens_pedido (pedido_id / produto_id) 
+    ⬇️ conecta com
+produtos (id)
 ```
+
+Veja como a consulta fica limpa, explicativa e fácil de entender usando o nome completo de cada tabela:
 
 ```sql
 SELECT 
-    c.nome AS cliente,
-    p.id AS pedido,
-    pr.nome AS produto,
-    ip.quantidade,
-    ip.preco_unitario,
-    (ip.quantidade * ip.preco_unitario) AS subtotal
-FROM clientes c
-INNER JOIN pedidos p ON c.id = p.cliente_id
-INNER JOIN itens_pedido ip ON p.id = ip.pedido_id
-INNER JOIN produtos pr ON ip.produto_id = pr.id;
+    clientes.nome AS nome_do_cliente,
+    pedidos.id AS numero_do_pedido,
+    produtos.nome AS nome_do_produto,
+    itens_pedido.quantidade,
+    itens_pedido.preco_unitario,
+    (itens_pedido.quantidade * itens_pedido.preco_unitario) AS subtotal
+FROM clientes
+INNER JOIN pedidos ON clientes.id = pedidos.cliente_id
+INNER JOIN itens_pedido ON pedidos.id = itens_pedido.pedido_id
+INNER JOIN produtos ON itens_pedido.produto_id = produtos.id;
 ```
 
 ---
@@ -223,7 +252,8 @@ Abaixo estão os 15 chamados recebidos pelo time de dados. Resolva cada um deles
 
 ## 🧰 Dicas de Bancada
 
-*   **Aliases de Tabela:** Utilize apelidos curtos (`FROM clientes c INNER JOIN pedidos p ON c.id = p.cliente_id`) para deixar suas consultas enxutas e fáceis de manter.
-*   **Validação Visual:** Ao rodar uma consulta analítica, compare a quantidade de linhas retornadas com o esperado pelo modelo de dados para garantir que não houve duplicação indevida por produto cartesiano.
+*   **Clareza em Primeiro Lugar:** Para quem está aprendendo e para códigos em equipe, escrever o nome completo da tabela (`clientes.nome`, `pedidos.id`) evita qualquer confusão mental sobre a origem de cada dado.
+*   **Validação Visual de Linhas:** Ao rodar uma consulta com `JOIN`, confira a quantidade de linhas retornadas para ter certeza de que a condição `ON` foi escrita corretamente e não gerou um produto cartesiano acidental (linhas multiplicadas).
+
 
 Excelente trabalho solucionando os chamados da TechStore Brasil! 🚀📈
