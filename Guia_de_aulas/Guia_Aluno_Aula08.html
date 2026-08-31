@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia da Aula 08 - Oficina Prática de DDL e DML em MySQL | Senac TDS01</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --senac-navy: #0F2137;
+            --senac-blue: #004B8D;
+            --senac-orange: #F37021;
+            --accent-blue: #0284C7;
+            --accent-teal: #0D9488;
+            --bg-main: #F8FAFC;
+            --bg-card: #FFFFFF;
+            --text-main: #1E293B;
+            --text-muted: #64748B;
+            --border-color: #E2E8F0;
+            --border-focus: #94A3B8;
+            --code-bg: #0F172A;
+            --code-text: #E2E8F0;
+            --alert-blue-bg: #F0F9FF;
+            --alert-blue-border: #0284C7;
+            --alert-amber-bg: #FFFBEB;
+            --alert-amber-border: #D97706;
+            --alert-emerald-bg: #F0FDF4;
+            --alert-emerald-border: #10B981;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.65;
+            font-size: 16px;
+            padding: 32px 16px 80px;
+        }
+
+        .container {
+            max-width: 920px;
+            margin: 0 auto;
+        }
+
+        .header-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 28px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border-top: 5px solid var(--senac-blue);
+        }
+
+        .meta-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+
+        .badge-senac {
+            background-color: #EBF3FA;
+            color: var(--senac-blue);
+        }
+
+        .badge-uc {
+            background-color: #E2E8F0;
+            color: #334155;
+        }
+
+        .badge-date {
+            background-color: #FEF3C7;
+            color: #92400E;
+        }
+
+        h1 {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--senac-navy);
+            line-height: 1.3;
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .section-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 28px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+
+        h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--senac-navy);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        h3 {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--senac-blue);
+            margin: 24px 0 12px;
+        }
+
+        p {
+            margin-bottom: 16px;
+            color: #334155;
+        }
+
+        .pillars-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .pillar-card {
+            background-color: #F8FAFC;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            transition: border-color 0.2s ease;
+        }
+
+        .pillar-card:hover {
+            border-color: var(--accent-blue);
+        }
+
+        .pillar-num {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 700;
+            background-color: var(--senac-blue);
+            color: #FFFFFF;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .pillar-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--senac-navy);
+            margin-bottom: 8px;
+        }
+
+        .pillar-desc {
+            font-size: 14px;
+            color: #475569;
+            line-height: 1.5;
+            margin-bottom: 0;
+        }
+
+        .diagram-box {
+            background-color: #F1F5F9;
+            border: 1px solid #CBD5E1;
+            border-radius: 8px;
+            padding: 24px;
+            margin: 24px 0;
+            text-align: center;
+        }
+
+        .diagram-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .diagram-node {
+            background: #FFFFFF;
+            border: 1.5px solid #94A3B8;
+            border-radius: 6px;
+            padding: 12px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--senac-navy);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .diagram-node.highlight {
+            border-color: var(--senac-blue);
+            background-color: #EBF3FA;
+            color: var(--senac-blue);
+            font-weight: 700;
+        }
+
+        .diagram-arrow {
+            font-size: 18px;
+            color: #64748B;
+            font-weight: bold;
+        }
+
+        .alert {
+            border-left: 4px solid;
+            border-radius: 0 8px 8px 0;
+            padding: 16px 20px;
+            margin: 20px 0;
+            font-size: 14.5px;
+        }
+
+        .alert-info {
+            background-color: var(--alert-blue-bg);
+            border-left-color: var(--alert-blue-border);
+            color: #0369A1;
+        }
+
+        .alert-warning {
+            background-color: var(--alert-amber-bg);
+            border-left-color: var(--alert-amber-border);
+            color: #92400E;
+        }
+
+        .alert-success {
+            background-color: var(--alert-emerald-bg);
+            border-left-color: var(--alert-emerald-border);
+            color: #065F46;
+        }
+
+        .alert strong {
+            font-weight: 700;
+        }
+
+        .code-block {
+            background-color: var(--code-bg);
+            border-radius: 8px;
+            margin: 16px 0 24px;
+            overflow: hidden;
+            border: 1px solid #1E293B;
+        }
+
+        .code-header {
+            background-color: #1E293B;
+            color: #94A3B8;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            font-weight: 500;
+            padding: 8px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #334155;
+        }
+
+        pre {
+            padding: 16px;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13.5px;
+            line-height: 1.6;
+            color: var(--code-text);
+        }
+
+        code {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .inline-code {
+            background-color: #E2E8F0;
+            color: #0F172A;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 13.5px;
+            font-weight: 500;
+        }
+
+        /* SQL Syntax Highlighting */
+        .sql-kw { color: #38BDF8; font-weight: 600; }
+        .sql-fn { color: #FBBF24; }
+        .sql-str { color: #4ADE80; }
+        .sql-cm { color: #64748B; font-style: italic; }
+        .sql-tbl { color: #E2E8F0; font-weight: 500; }
+
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 20px 0;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #F1F5F9;
+            color: var(--senac-navy);
+            font-weight: 700;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+            color: #334155;
+            vertical-align: top;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:nth-child(even) {
+            background-color: #F8FAFC;
+        }
+
+        .challenge-box {
+            background-color: #F8FAFC;
+            border: 2px solid #CBD5E1;
+            border-radius: 8px;
+            padding: 24px;
+            margin-top: 24px;
+        }
+
+        .challenge-header {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--senac-navy);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .task-list {
+            list-style: none;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 12px;
+            font-size: 14.5px;
+            color: #334155;
+        }
+
+        .task-checkbox {
+            margin-top: 4px;
+            accent-color: var(--senac-blue);
+            width: 16px;
+            height: 16px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        @media (max-width: 640px) {
+            body { padding: 16px 8px; }
+            .header-card, .section-card { padding: 20px; }
+            .pillars-grid { grid-template-columns: 1fr; }
+            .diagram-flow { flex-direction: column; }
+            .diagram-arrow { transform: rotate(90deg); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Header -->
+    <header class="header-card">
+        <div class="meta-badges">
+            <span class="badge badge-senac">Senac Ribeirão Preto • TDS</span>
+            <span class="badge badge-uc">UC3: Modelar e Estruturar Banco de Dados</span>
+            <span class="badge badge-date">Aula 08 • 10/08/2026</span>
+        </div>
+        <h1>Oficina Prática de Estruturação e Manipulação em MySQL (DDL e DML)</h1>
+        <p class="subtitle">Prática intensiva de criação de esquemas relacionais, integridade referencial com chaves estrangeiras duplas, evolução de esquema com ALTER TABLE, operações DML seguras e análise comparativa entre TRUNCATE e DELETE.</p>
+    </header>
+
+    <!-- Section 1: Fundamentos da Integridade -->
+    <section class="section-card">
+        <h2>1. Integridade Referencial: Tabelas Pai vs. Tabelas Filhas</h2>
+        <p>Em sistemas comerciais reais, as tabelas não existem de forma isolada. A tabela <span class="inline-code">produtos</span> depende diretamente da existência prévia de categorias e fornecedores para ser criada e receber registros.</p>
+
+        <div class="diagram-box">
+            <p style="font-size: 13px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Topologia de Dependência Estrutural</p>
+            <div class="diagram-flow">
+                <div class="diagram-node">
+                    📁 categorias (Pai 1)<br><small>id_categoria (PK)</small>
+                </div>
+                <div class="diagram-arrow">➔</div>
+                <div class="diagram-node highlight">
+                    📦 produtos (Filha)<br><small>id_produto (PK), id_categoria (FK), id_fornecedor (FK)</small>
+                </div>
+                <div class="diagram-arrow">⬅</div>
+                <div class="diagram-node">
+                    🏭 fornecedores (Pai 2)<br><small>id_fornecedor (PK)</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="alert alert-info">
+            <strong>Ordem de Execução Mandatória:</strong> Ao construir ou restaurar um banco de dados relacional, as <strong>tabelas independentes (pais)</strong> devem sempre ser criadas e populadas antes das <strong>tabelas dependentes (filhas)</strong>.
+        </div>
+    </section>
+
+    <!-- Section 2: Laboratório DDL -->
+    <section class="section-card">
+        <h2>2. Laboratório DDL: Construção Estruturada do Banco</h2>
+        <p>Acesse a aba <strong>SQL</strong> do phpMyAdmin para construir a base <span class="inline-code">db_laboratorio_pratico</span>:</p>
+
+        <div class="code-block">
+            <div class="code-header">
+                <span>SQL • Estrutura de DDL com Duas Chaves Estrangeiras</span>
+                <span>MySQL</span>
+            </div>
+            <pre><span class="sql-kw">SET NAMES</span> utf8mb4;
+
+<span class="sql-kw">DROP DATABASE IF EXISTS</span> db_laboratorio_pratico;
+<span class="sql-kw">CREATE DATABASE</span> db_laboratorio_pratico 
+  <span class="sql-kw">CHARACTER SET</span> utf8mb4 
+  <span class="sql-kw">COLLATE</span> utf8mb4_unicode_ci;
+
+<span class="sql-kw">USE</span> db_laboratorio_pratico;
+
+<span class="sql-cm">-- Tabela Pai 1: Categorias</span>
+<span class="sql-kw">CREATE TABLE</span> categorias (
+    id_categoria <span class="sql-kw">INT UNSIGNED AUTO_INCREMENT PRIMARY KEY</span>,
+    nome <span class="sql-kw">VARCHAR</span>(80) <span class="sql-kw">NOT NULL UNIQUE</span>,
+    descricao <span class="sql-kw">VARCHAR</span>(200)
+) <span class="sql-kw">ENGINE</span>=InnoDB;
+
+<span class="sql-cm">-- Tabela Pai 2: Fornecedores</span>
+<span class="sql-kw">CREATE TABLE</span> fornecedores (
+    id_fornecedor <span class="sql-kw">INT UNSIGNED AUTO_INCREMENT PRIMARY KEY</span>,
+    razao_social <span class="sql-kw">VARCHAR</span>(120) <span class="sql-kw">NOT NULL UNIQUE</span>,
+    cidade <span class="sql-kw">VARCHAR</span>(80) <span class="sql-kw">NOT NULL</span>,
+    estado <span class="sql-kw">CHAR</span>(2) <span class="sql-kw">NOT NULL DEFAULT</span> <span class="sql-str">'SP'</span>
+) <span class="sql-kw">ENGINE</span>=InnoDB;
+
+<span class="sql-cm">-- Tabela Filha: Produtos</span>
+<span class="sql-kw">CREATE TABLE</span> produtos (
+    id_produto <span class="sql-kw">INT UNSIGNED AUTO_INCREMENT PRIMARY KEY</span>,
+    nome <span class="sql-kw">VARCHAR</span>(120) <span class="sql-kw">NOT NULL</span>,
+    preco <span class="sql-kw">DECIMAL</span>(10,2) <span class="sql-kw">NOT NULL</span>,
+    estoque <span class="sql-kw">INT NOT NULL DEFAULT</span> 0,
+    id_categoria <span class="sql-kw">INT UNSIGNED NOT NULL</span>,
+    id_fornecedor <span class="sql-kw">INT UNSIGNED NOT NULL</span>,
+    <span class="sql-kw">CONSTRAINT</span> fk_categoria_prod <span class="sql-kw">FOREIGN KEY</span> (id_categoria) <span class="sql-kw">REFERENCES</span> categorias(id_categoria),
+    <span class="sql-kw">CONSTRAINT</span> fk_fornecedor_prod <span class="sql-kw">FOREIGN KEY</span> (id_fornecedor) <span class="sql-kw">REFERENCES</span> fornecedores(id_fornecedor)
+) <span class="sql-kw">ENGINE</span>=InnoDB;</pre>
+        </div>
+    </section>
+
+    <!-- Section 3: Evolução de Esquema e DML -->
+    <section class="section-card">
+        <h2>3. Evolução Estrutural (<span class="inline-code">ALTER TABLE</span>) e Povoamento (DML)</h2>
+
+        <h3>Modificando a Tabela sem Recriá-la</h3>
+        <div class="code-block">
+            <div class="code-header">
+                <span>SQL • Comandos de Evolução Estrutural</span>
+                <span>MySQL</span>
+            </div>
+            <pre><span class="sql-cm">-- Adicionar coluna de avaliação com validação CHECK</span>
+<span class="sql-kw">ALTER TABLE</span> produtos 
+<span class="sql-kw">ADD COLUMN</span> avaliacao <span class="sql-kw">DECIMAL</span>(3,1) <span class="sql-kw">CHECK</span> (avaliacao <span class="sql-kw">BETWEEN</span> 0.0 <span class="sql-kw">AND</span> 10.0);
+
+<span class="sql-cm">-- Modificar tamanho e valor default</span>
+<span class="sql-kw">ALTER TABLE</span> fornecedores 
+<span class="sql-kw">MODIFY COLUMN</span> cidade <span class="sql-kw">VARCHAR</span>(100) <span class="sql-kw">DEFAULT</span> <span class="sql-str">'Não Informada'</span>;</pre>
+        </div>
+
+        <h3>Povoamento e Atualizações Direcionadas (DML)</h3>
+        <div class="code-block">
+            <div class="code-header">
+                <span>SQL • Inserções e Updates Seguros</span>
+                <span>MySQL</span>
+            </div>
+            <pre><span class="sql-cm">-- 1. Povoando categorias e fornecedores</span>
+<span class="sql-kw">INSERT INTO</span> categorias (nome, descricao) <span class="sql-kw">VALUES</span> 
+(<span class="sql-str">'Hardware'</span>, <span class="sql-str">'Componentes físicos e periféricos'</span>),
+(<span class="sql-str">'Acessórios'</span>, <span class="sql-str">'Cabos e suportes'</span>);
+
+<span class="sql-kw">INSERT INTO</span> fornecedores (razao_social, cidade, estado) <span class="sql-kw">VALUES</span> 
+(<span class="sql-str">'Tech Distribuidora SP'</span>, <span class="sql-str">'São Paulo'</span>, <span class="sql-str">'SP'</span>),
+(<span class="sql-str">'Sul Componentes'</span>, <span class="sql-str">'Curitiba'</span>, <span class="sql-str">'PR'</span>);
+
+<span class="sql-cm">-- 2. Povoando produtos vinculados</span>
+<span class="sql-kw">INSERT INTO</span> produtos (nome, preco, estoque, id_categoria, id_fornecedor, avaliacao) <span class="sql-kw">VALUES</span> 
+(<span class="sql-str">'Teclado Mecânico RGB'</span>, 280.00, 15, 1, 1, 9.5),
+(<span class="sql-str">'Mouse Sem Fio 1600DPI'</span>, 95.00, 30, 2, 1, 8.8),
+(<span class="sql-str">'Monitor 27 Pol 144Hz'</span>, 1250.00, 8, 1, 2, 9.8);
+
+<span class="sql-cm">-- 3. Atualização com filtro WHERE obrigatório</span>
+<span class="sql-kw">UPDATE</span> produtos 
+<span class="sql-kw">SET</span> preco = 269.90, estoque = 12 
+<span class="sql-kw">WHERE</span> id_produto = 1;</pre>
+        </div>
+    </section>
+
+    <!-- Section 4: TRUNCATE vs DELETE -->
+    <section class="section-card">
+        <h2>4. Comparativo de Bancada: <span class="inline-code">TRUNCATE</span> vs. <span class="inline-code">DELETE</span></h2>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 25%;">Característica</th>
+                        <th style="width: 37.5%;">DELETE (DML)</th>
+                        <th style="width: 37.5%;">TRUNCATE (DDL)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Categoria de Comando</strong></td>
+                        <td>DML (Manipulação de Dados).</td>
+                        <td>DDL (Definição / Estrutura).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Uso de Filtro WHERE</strong></td>
+                        <td>Suporta filtro por linha (ex: <span class="inline-code">WHERE id = 2</span>).</td>
+                        <td>Não suporta (apaga a tabela inteira instantaneamente).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Contador AUTO_INCREMENT</strong></td>
+                        <td>Mantém a sequência do último ID gerado.</td>
+                        <td>Reseta o contador para 1.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Velocidade de Execução</strong></td>
+                        <td>Mais lento em bases grandes (apaga linha por linha).</td>
+                        <td>Ultra-rápido (desaloca as páginas do disco).</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="alert alert-warning">
+            <strong>Cuidado Absoluto com Comandos sem WHERE:</strong> Nunca execute <span class="inline-code">UPDATE</span> ou <span class="inline-code">DELETE</span> em ambiente de produção sem a cláusula <span class="inline-code">WHERE</span>!
+        </div>
+    </section>
+
+    <!-- Section 5: Desafio de Bancada -->
+    <section class="section-card">
+        <h2>5. Desafio de Bancada da Aula 08</h2>
+
+        <div class="challenge-box">
+            <div class="challenge-header">
+                📋 Checklist de Atividades Práticas:
+            </div>
+            <ul class="task-list">
+                <li class="task-item">
+                    <input type="checkbox" class="task-checkbox" id="t1">
+                    <label for="t1"><strong>Tarefa 1:</strong> Criar a base <span class="inline-code">db_laboratorio_pratico</span> com as 3 tabelas e suas duas Chaves Estrangeiras.</label>
+                </li>
+                <li class="task-item">
+                    <input type="checkbox" class="task-checkbox" id="t2">
+                    <label for="t2"><strong>Tarefa 2:</strong> Aplicar o <span class="inline-code">ALTER TABLE</span> adicionando a restrição de intervalo para <span class="inline-code">avaliacao</span>.</label>
+                </li>
+                <li class="task-item">
+                    <input type="checkbox" class="task-checkbox" id="t3">
+                    <label for="t3"><strong>Tarefa 3:</strong> Inserir registros e praticar o comando <span class="inline-code">UPDATE</span> no produto de ID 1.</label>
+                </li>
+                <li class="task-item">
+                    <input type="checkbox" class="task-checkbox" id="t4">
+                    <label for="t4"><strong>Tarefa 4:</strong> Excluir um produto com <span class="inline-code">DELETE</span> e observar que o próximo produto inserido mantém a lacuna de ID.</label>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p><strong>Curso Técnico em Desenvolvimento de Sistemas • Senac Ribeirão Preto</strong><br>Unidade Curricular 3: Modelar e Estruturar Banco de Dados • Docente: Haroldo Curti</p>
+    </footer>
+
+</div>
+
+</body>
+</html>

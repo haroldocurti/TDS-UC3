@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia da Aula 11 - Consultas Relacionais em SQL (DQL) | Senac TDS01</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --senac-navy: #0F2137;
+            --senac-blue: #004B8D;
+            --senac-orange: #F37021;
+            --accent-blue: #0284C7;
+            --accent-teal: #0D9488;
+            --bg-main: #F8FAFC;
+            --bg-card: #FFFFFF;
+            --text-main: #1E293B;
+            --text-muted: #64748B;
+            --border-color: #E2E8F0;
+            --border-focus: #94A3B8;
+            --code-bg: #0F172A;
+            --code-text: #E2E8F0;
+            --alert-blue-bg: #F0F9FF;
+            --alert-blue-border: #0284C7;
+            --alert-amber-bg: #FFFBEB;
+            --alert-amber-border: #D97706;
+            --alert-emerald-bg: #F0FDF4;
+            --alert-emerald-border: #10B981;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.65;
+            font-size: 16px;
+            padding: 32px 16px 80px;
+        }
+
+        .container {
+            max-width: 920px;
+            margin: 0 auto;
+        }
+
+        .header-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 28px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border-top: 5px solid var(--senac-blue);
+        }
+
+        .meta-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+
+        .badge-senac {
+            background-color: #EBF3FA;
+            color: var(--senac-blue);
+        }
+
+        .badge-uc {
+            background-color: #E2E8F0;
+            color: #334155;
+        }
+
+        .badge-date {
+            background-color: #FEF3C7;
+            color: #92400E;
+        }
+
+        h1 {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--senac-navy);
+            line-height: 1.3;
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .section-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 28px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+
+        h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--senac-navy);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        h3 {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--senac-blue);
+            margin: 24px 0 12px;
+        }
+
+        p {
+            margin-bottom: 16px;
+            color: #334155;
+        }
+
+        .pillars-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .pillar-card {
+            background-color: #F8FAFC;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            transition: border-color 0.2s ease;
+        }
+
+        .pillar-card:hover {
+            border-color: var(--accent-blue);
+        }
+
+        .pillar-num {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 700;
+            background-color: var(--senac-blue);
+            color: #FFFFFF;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .pillar-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--senac-navy);
+            margin-bottom: 8px;
+        }
+
+        .pillar-desc {
+            font-size: 14px;
+            color: #475569;
+            line-height: 1.5;
+            margin-bottom: 0;
+        }
+
+        .diagram-box {
+            background-color: #F1F5F9;
+            border: 1px solid #CBD5E1;
+            border-radius: 8px;
+            padding: 24px;
+            margin: 24px 0;
+            text-align: center;
+        }
+
+        .diagram-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .diagram-node {
+            background: #FFFFFF;
+            border: 1.5px solid #94A3B8;
+            border-radius: 6px;
+            padding: 12px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--senac-navy);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .diagram-node.highlight {
+            border-color: var(--senac-blue);
+            background-color: #EBF3FA;
+            color: var(--senac-blue);
+            font-weight: 700;
+        }
+
+        .diagram-arrow {
+            font-size: 18px;
+            color: #64748B;
+            font-weight: bold;
+        }
+
+        .alert {
+            border-left: 4px solid;
+            border-radius: 0 8px 8px 0;
+            padding: 16px 20px;
+            margin: 20px 0;
+            font-size: 14.5px;
+        }
+
+        .alert-info {
+            background-color: var(--alert-blue-bg);
+            border-left-color: var(--alert-blue-border);
+            color: #0369A1;
+        }
+
+        .alert-warning {
+            background-color: var(--alert-amber-bg);
+            border-left-color: var(--alert-amber-border);
+            color: #92400E;
+        }
+
+        .alert-success {
+            background-color: var(--alert-emerald-bg);
+            border-left-color: var(--alert-emerald-border);
+            color: #065F46;
+        }
+
+        .alert strong {
+            font-weight: 700;
+        }
+
+        .code-block {
+            background-color: var(--code-bg);
+            border-radius: 8px;
+            margin: 16px 0 24px;
+            overflow: hidden;
+            border: 1px solid #1E293B;
+        }
+
+        .code-header {
+            background-color: #1E293B;
+            color: #94A3B8;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            font-weight: 500;
+            padding: 8px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #334155;
+        }
+
+        pre {
+            padding: 16px;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13.5px;
+            line-height: 1.6;
+            color: var(--code-text);
+        }
+
+        code {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .inline-code {
+            background-color: #E2E8F0;
+            color: #0F172A;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 13.5px;
+            font-weight: 500;
+        }
+
+        /* SQL Syntax Highlighting */
+        .sql-kw { color: #38BDF8; font-weight: 600; }
+        .sql-fn { color: #FBBF24; }
+        .sql-str { color: #4ADE80; }
+        .sql-cm { color: #64748B; font-style: italic; }
+        .sql-tbl { color: #E2E8F0; font-weight: 500; }
+
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 20px 0;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #F1F5F9;
+            color: var(--senac-navy);
+            font-weight: 700;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+            color: #334155;
+            vertical-align: top;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:nth-child(even) {
+            background-color: #F8FAFC;
+        }
+
+        .challenge-box {
+            background-color: #F8FAFC;
+            border: 2px solid #CBD5E1;
+            border-radius: 8px;
+            padding: 24px;
+            margin-top: 24px;
+        }
+
+        .challenge-header {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--senac-navy);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .task-list {
+            list-style: none;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 12px;
+            font-size: 14.5px;
+            color: #334155;
+        }
+
+        .task-checkbox {
+            margin-top: 4px;
+            accent-color: var(--senac-blue);
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Chamados Cards */
+        .chamado-card {
+            background-color: #F8FAFC;
+            border-left: 4px solid var(--senac-blue);
+            border-top: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            border-radius: 0 8px 8px 0;
+            padding: 16px 20px;
+            margin-bottom: 16px;
+        }
+
+        .chamado-title {
+            font-weight: 700;
+            color: var(--senac-navy);
+            margin-bottom: 4px;
+        }
+
+        .chamado-desc {
+            font-size: 14px;
+            color: #475569;
+            margin-bottom: 0;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        @media (max-width: 640px) {
+            body { padding: 16px 8px; }
+            .header-card, .section-card { padding: 20px; }
+            .pillars-grid { grid-template-columns: 1fr; }
+            .diagram-flow { flex-direction: column; }
+            .diagram-arrow { transform: rotate(90deg); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Header -->
+    <header class="header-card">
+        <div class="meta-badges">
+            <span class="badge badge-senac">Senac Ribeirão Preto • TDS</span>
+            <span class="badge badge-uc">UC3: Modelar e Estruturar Banco de Dados</span>
+            <span class="badge badge-date">Aula 11 • 18/08/2026</span>
+        </div>
+        <h1>Consultas Relacionais em SQL (DQL) e Análise de Dados</h1>
+        <p class="subtitle">Guia completo de recuperação de dados, filtros condicionais, funções de agregação (GROUP BY / HAVING), junções relacionais (INNER JOIN / LEFT JOIN) e resolução de 15 chamados corporativos no estudo de caso TechStore Brasil.</p>
+    </header>
+
+    <!-- Section 1: Estudo de Caso TechStore Brasil -->
+    <section class="section-card">
+        <h2>1. Estudo de Caso Corporativo: TechStore Brasil</h2>
+        <p>Você assume o papel de <strong>Analista de Dados Júnior da TechStore Brasil</strong>, um e-commerce em expansão nacional. Para responder aos chamados das diretorias de Marketing, Logística, Estoque e Finanças, utilizaremos a base <span class="inline-code">loja_teste</span>:</p>
+
+        <div class="diagram-box">
+            <p style="font-size: 13px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Topologia Relacional da TechStore Brasil</p>
+            <div class="diagram-flow">
+                <div class="diagram-node">
+                    👤 clientes (25 registros)<br><small>id (PK), nome, email, cidade, estado</small>
+                </div>
+                <div class="diagram-arrow">➔ 1:N</div>
+                <div class="diagram-node highlight">
+                    🛒 pedidos (27 registros)<br><small>id (PK), cliente_id (FK), data_pedido, status</small>
+                </div>
+                <div class="diagram-arrow">➔ 1:N</div>
+                <div class="diagram-node highlight">
+                    📋 itens_pedido (35 registros)<br><small>pedido_id (FK), produto_id (FK), quantidade, preco_unitario</small>
+                </div>
+                <div class="diagram-arrow">⬅ N:1</div>
+                <div class="diagram-node">
+                    📦 produtos (68 registros)<br><small>id (PK), nome, categoria, preco, estoque</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="alert alert-info">
+            <strong>Preparação do Ambiente:</strong> Abra o phpMyAdmin, acerte a aba SQL, execute o script <span class="inline-code">Biblioteca/loja_teste_completo.sql</span> para criar as 4 tabelas populadas e conferir a massa de dados ativa.
+        </div>
+    </section>
+
+    <!-- Section 2: Fundamentos DQL -->
+    <section class="section-card">
+        <h2>2. Fundamentos de DQL: Seleção, Filtros e Ordenação</h2>
+
+        <div class="code-block">
+            <div class="code-header">
+                <span>SQL • SELECT, WHERE, ORDER BY e LIMIT</span>
+                <span>MySQL</span>
+            </div>
+            <pre><span class="sql-cm">-- 1. Seleção de colunas específicas</span>
+<span class="sql-kw">SELECT</span> nome, email, cidade <span class="sql-kw">FROM</span> clientes;
+
+<span class="sql-cm">-- 2. Filtros combinados com operadores relacionais e lógicos</span>
+<span class="sql-kw">SELECT</span> nome, preco, estoque 
+<span class="sql-kw">FROM</span> produtos 
+<span class="sql-kw">WHERE</span> categoria = <span class="sql-str">'Eletrônicos'</span> <span class="sql-kw">AND</span> preco &gt; 100.00;
+
+<span class="sql-cm">-- 3. Filtros por intervalo (BETWEEN) e listas (IN)</span>
+<span class="sql-kw">SELECT</span> nome, preco <span class="sql-kw">FROM</span> produtos <span class="sql-kw">WHERE</span> preco <span class="sql-kw">BETWEEN</span> 50.00 <span class="sql-kw">AND</span> 100.00;
+<span class="sql-kw">SELECT</span> * <span class="sql-kw">FROM</span> clientes <span class="sql-kw">WHERE</span> estado <span class="sql-kw">IN</span> (<span class="sql-str">'SP'</span>, <span class="sql-str">'RJ'</span>, <span class="sql-str">'MG'</span>);
+
+<span class="sql-cm">-- 4. Busca por padrões de texto com LIKE (% representa múltiplos caracteres)</span>
+<span class="sql-kw">SELECT</span> nome, email <span class="sql-kw">FROM</span> clientes <span class="sql-kw">WHERE</span> nome <span class="sql-kw">LIKE</span> <span class="sql-str">'M%'</span> <span class="sql-kw">AND</span> email <span class="sql-kw">LIKE</span> <span class="sql-str">'%@email.com'</span>;
+
+<span class="sql-cm">-- 5. Ordenação e paginação (LIMIT)</span>
+<span class="sql-kw">SELECT</span> nome, preco, estoque <span class="sql-kw">FROM</span> produtos <span class="sql-kw">ORDER BY</span> preco <span class="sql-kw">DESC LIMIT</span> 5;</pre>
+        </div>
+    </section>
+
+    <!-- Section 3: Análise e Agregações -->
+    <section class="section-card">
+        <h2>3. Funções de Agregação, Agrupamentos e HAVING</h2>
+        <p>Funções agregadas processam conjuntos de linhas e retornam métricas de resumo:</p>
+
+        <div class="code-block">
+            <div class="code-header">
+                <span>SQL • GROUP BY e Métricas Agregadas</span>
+                <span>MySQL</span>
+            </div>
+            <pre><span class="sql-kw">SELECT</span> 
+    categoria,
+    <span class="sql-fn">COUNT</span>(*) <span class="sql-kw">AS</span> total_produtos,
+    <span class="sql-fn">AVG</span>(preco) <span class="sql-kw">AS</span> media_preco,
+    <span class="sql-fn">MIN</span>(preco) <span class="sql-kw">AS</span> menor_preco,
+    <span class="sql-fn">MAX</span>(preco) <span class="sql-kw">AS</span> maior_preco
+<span class="sql-kw">FROM</span> produtos
+<span class="sql-kw">GROUP BY</span> categoria
+<span class="sql-kw">HAVING</span> media_preco &gt; 150.00
+<span class="sql-kw">ORDER BY</span> media_preco <span class="sql-kw">DESC</span>;</pre>
+        </div>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 25%;">Cláusula</th>
+                        <th style="width: 37.5%;">Momento de Execução</th>
+                        <th style="width: 37.5%;">Uso Recomendado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>WHERE</strong></td>
+                        <td>Filtra linhas individuais <strong>antes</strong> do agrupamento.</td>
+                        <td><span class="inline-code">WHERE status = 'Processando'</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>HAVING</strong></td>
+                        <td>Filtra os grupos resultantes <strong>após</strong> o <span class="inline-code">GROUP BY</span>.</td>
+                        <td><span class="inline-code">HAVING SUM(subtotal) &gt; 300.00</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Section 4: Junções Relacionais -->
+    <section class="section-card">
+        <h2>4. Junções Relacionais: INNER JOIN, LEFT JOIN e Cadeias</h2>
+
+        <div class="code-block">
+            <div class="code-header">
+                <span>SQL • INNER JOIN (Cruzamento Exato)</span>
+                <span>MySQL</span>
+            </div>
+            <pre><span class="sql-kw">SELECT</span> 
+    clientes.nome <span class="sql-kw">AS</span> nome_do_cliente,
+    pedidos.id <span class="sql-kw">AS</span> numero_do_pedido,
+    pedidos.data_pedido
+<span class="sql-kw">FROM</span> clientes
+<span class="sql-kw">INNER JOIN</span> pedidos <span class="sql-kw">ON</span> clientes.id = pedidos.cliente_id;</pre>
+        </div>
+
+        <div class="code-block">
+            <div class="code-header">
+                <span>SQL • LEFT JOIN e Detecção de Inativos (IS NULL)</span>
+                <span>MySQL</span>
+            </div>
+            <pre><span class="sql-cm">-- Identifica clientes cadastrados que nunca realizaram nenhum pedido</span>
+<span class="sql-kw">SELECT</span> 
+    clientes.nome,
+    clientes.email
+<span class="sql-kw">FROM</span> clientes
+<span class="sql-kw">LEFT JOIN</span> pedidos <span class="sql-kw">ON</span> clientes.id = pedidos.cliente_id
+<span class="sql-kw">WHERE</span> pedidos.id <span class="sql-kw">IS NULL</span>;</pre>
+        </div>
+
+        <div class="code-block">
+            <div class="code-header">
+                <span>SQL • Junção Multi-Tabelas em Cadeia (4 Tabelas Conectadas)</span>
+                <span>MySQL</span>
+            </div>
+            <pre><span class="sql-kw">SELECT</span> 
+    clientes.nome <span class="sql-kw">AS</span> cliente,
+    pedidos.id <span class="sql-kw">AS</span> pedido_id,
+    produtos.nome <span class="sql-kw">AS</span> produto,
+    itens_pedido.quantidade,
+    itens_pedido.preco_unitario,
+    (itens_pedido.quantidade * itens_pedido.preco_unitario) <span class="sql-kw">AS</span> subtotal
+<span class="sql-kw">FROM</span> clientes
+<span class="sql-kw">INNER JOIN</span> pedidos <span class="sql-kw">ON</span> clientes.id = pedidos.cliente_id
+<span class="sql-kw">INNER JOIN</span> itens_pedido <span class="sql-kw">ON</span> pedidos.id = itens_pedido.pedido_id
+<span class="sql-kw">INNER JOIN</span> produtos <span class="sql-kw">ON</span> itens_pedido.produto_id = produtos.id;</pre>
+        </div>
+    </section>
+
+    <!-- Section 5: A Carteira dos 15 Chamados -->
+    <section class="section-card">
+        <h2>5. A Carteira Corporativa: Os 15 Chamados da TechStore</h2>
+
+        <h3>Módulo 1: Atendimento e Marketing (Filtros e Consultas Básicas)</h3>
+        <div class="chamado-card">
+            <div class="chamado-title">📩 Chamado #101 (Marketing): Campanha de E-mail Geral</div>
+            <p class="chamado-desc">Extraia apenas o <span class="inline-code">nome</span> e o <span class="inline-code">email</span> de todos os clientes da base.</p>
+        </div>
+        <div class="chamado-card">
+            <div class="chamado-title">📍 Chamado #102 (Logística): Abertura de Novo CD em Minas Gerais</div>
+            <p class="chamado-desc">Retorne todas as informações dos clientes que residem no estado <span class="inline-code">'MG'</span>.</p>
+        </div>
+        <div class="chamado-card">
+            <div class="chamado-title">🪑 Chamado #103 (Comercial): Campanha Premium de Móveis</div>
+            <p class="chamado-desc">Liste <span class="inline-code">nome</span>, <span class="inline-code">preco</span> e <span class="inline-code">estoque</span> dos itens de <span class="inline-code">'Móveis'</span> com preço superior a R$ 200,00.</p>
+        </div>
+        <div class="chamado-card">
+            <div class="chamado-title">🏷️ Chamado #104 (Marketing): Promoção "Faixa Ideal"</div>
+            <p class="chamado-desc">Liste <span class="inline-code">nome</span> e <span class="inline-code">preco</span> dos produtos com valor entre R$ 50,00 e R$ 100,00.</p>
+        </div>
+        <div class="chamado-card">
+            <div class="chamado-title">🚚 Chamado #105 (Logística): Campanha Regional Sudeste</div>
+            <p class="chamado-desc">Localize todos os clientes que residem nos estados de <span class="inline-code">'SP'</span>, <span class="inline-code">'RJ'</span> ou <span class="inline-code">'MG'</span>.</p>
+        </div>
+        <div class="chamado-card">
+            <div class="chamado-title">🔍 Chamado #106 (TI/Segurança): Auditoria de Cadastros de Teste</div>
+            <p class="chamado-desc">Liste clientes cujo nome comece com <span class="inline-code">'M'</span> e cujo e-mail termine com <span class="inline-code">'@email.com'</span>.</p>
+        </div>
+
+        <h3>Módulo 2: Gestão de Estoque e Indicadores Globais (Agregações)</h3>
+        <div class="chamado-card">
+            <div class="chamado-title">⚠️ Chamado #107 (Estoque): Alerta de Ruptura Crítica</div>
+            <p class="chamado-desc">Exiba o <span class="inline-code">nome</span>, <span class="inline-code">preco</span> e <span class="inline-code">estoque</span> dos 3 produtos com menor quantidade em estoque.</p>
+        </div>
+        <div class="chamado-card">
+            <div class="chamado-title">📊 Chamado #108 (Diretoria): Painel Executivo de Faturamento Unitário</div>
+            <p class="chamado-desc">Calcule em uma consulta: <span class="inline-code">total_pecas_vendidas</span>, <span class="inline-code">preco_unitario_medio</span> e o <span class="inline-code">item_mais_caro</span>.</p>
+        </div>
+        <div class="chamado-card">
+            <div class="chamado-title">🗺️ Chamado #109 (Comercial): Concentração de Clientes por Estado</div>
+            <p class="chamado-desc">Liste cada <span class="inline-code">estado</span> e o <span class="inline-code">total_clientes</span>, ordenando do maior para o menor.</p>
+        </div>
+        <div class="chamado-card">
+            <div class="chamado-title">💎 Chamado #110 (Planejamento): Segmentos de Alto Valor Médio</div>
+            <p class="chamado-desc">Agrupe por <span class="inline-code">categoria</span> e exiba apenas aquelas com média de preço superior a R$ 150,00.</p>
+        </div>
+
+        <h3>Módulo 3: Operações, Relacionamentos e Finanças (JOINs)</h3>
+        <div class="chamado-card">
+            <div class="chamado-title">📦 Chamado #111 (Atendimento): Histórico de Pedidos de Clientes</div>
+            <p class="chamado-desc">Gere uma lista com <span class="inline-code">nome</span> do cliente, <span class="inline-code">id</span> do pedido e <span class="inline-code">data_pedido</span> para todas as compras registradas.</p>
+        </div>
+        <div class="chamado-card">
+            <div class="chamado-title">⏳ Chamado #112 (Logística): Pedidos Travados em Triagem</div>
+            <p class="chamado-desc">Liste <span class="inline-code">nome</span>, <span class="inline-code">cidade</span>, <span class="inline-code">id</span> do pedido e <span class="inline-code">status</span> apenas para pedidos com status <span class="inline-code">'Processando'</span>.</p>
+        </div>
+        <div class="chamado-card">
+            <div class="chamado-title">💤 Chamado #113 (CRM/Marketing): Reativação de Contas Inativas</div>
+            <p class="chamado-desc">Usando <span class="inline-code">LEFT JOIN</span>, liste clientes que nunca realizaram compras (<span class="inline-code">pedidos.id IS NULL</span>).</p>
+        </div>
+        <div class="chamado-card">
+            <div class="chamado-title">📋 Chamado #114 (Auditoria): Rastreio Completo de Itens Faturados</div>
+            <p class="chamado-desc">Conecte <span class="inline-code">pedidos</span>, <span class="inline-code">itens_pedido</span> e <span class="inline-code">produtos</span> trazendo ID do pedido, data, produto, quantidade e preço.</p>
+        </div>
+        <div class="chamado-card">
+            <div class="chamado-title">🏆 Chamado #115 (Finanças): Relatório de Clientes VIP (Desafio Master)</div>
+            <p class="chamado-desc">Conecte <span class="inline-code">clientes</span>, <span class="inline-code">pedidos</span> e <span class="inline-code">itens_pedido</span>, calcule o total gasto acumulado por cliente, filtre apenas quem gastou mais de R$ 300,00 (<span class="inline-code">HAVING</span>) e ordene do mais lucrativo para o menor.</p>
+        </div>
+    </section>
+
+    <!-- Section 6: Desafio de Bancada -->
+    <section class="section-card">
+        <h2>6. Desafio de Bancada da Aula 11</h2>
+
+        <div class="challenge-box">
+            <div class="challenge-header">
+                📋 Checklist de Atividades Práticas:
+            </div>
+            <ul class="task-list">
+                <li class="task-item">
+                    <input type="checkbox" class="task-checkbox" id="t1">
+                    <label for="t1"><strong>Módulo 1:</strong> Resolver e validar no phpMyAdmin os Chamados #101 a #106.</label>
+                </li>
+                <li class="task-item">
+                    <input type="checkbox" class="task-checkbox" id="t2">
+                    <label for="t2"><strong>Módulo 2:</strong> Resolver e validar no phpMyAdmin os Chamados #107 a #110.</label>
+                </li>
+                <li class="task-item">
+                    <input type="checkbox" class="task-checkbox" id="t3">
+                    <label for="t3"><strong>Módulo 3:</strong> Resolver e validar no phpMyAdmin os Chamados #111 a #115.</label>
+                </li>
+                <li class="task-item">
+                    <input type="checkbox" class="task-checkbox" id="t4">
+                    <label for="t4"><strong>Transferência para o PI:</strong> Escrever ao menos 1 consulta com INNER JOIN entre as tabelas do seu Projeto Integrador.</label>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p><strong>Curso Técnico em Desenvolvimento de Sistemas • Senac Ribeirão Preto</strong><br>Unidade Curricular 3: Modelar e Estruturar Banco de Dados • Docente: Haroldo Curti</p>
+    </footer>
+
+</div>
+
+</body>
+</html>

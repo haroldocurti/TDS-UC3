@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia da Aula 10 - Materialização Física dos Projetos Integradores no MySQL | Senac TDS01</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --senac-navy: #0F2137;
+            --senac-blue: #004B8D;
+            --senac-orange: #F37021;
+            --accent-blue: #0284C7;
+            --accent-teal: #0D9488;
+            --bg-main: #F8FAFC;
+            --bg-card: #FFFFFF;
+            --text-main: #1E293B;
+            --text-muted: #64748B;
+            --border-color: #E2E8F0;
+            --border-focus: #94A3B8;
+            --code-bg: #0F172A;
+            --code-text: #E2E8F0;
+            --alert-blue-bg: #F0F9FF;
+            --alert-blue-border: #0284C7;
+            --alert-amber-bg: #FFFBEB;
+            --alert-amber-border: #D97706;
+            --alert-emerald-bg: #F0FDF4;
+            --alert-emerald-border: #10B981;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.65;
+            font-size: 16px;
+            padding: 32px 16px 80px;
+        }
+
+        .container {
+            max-width: 920px;
+            margin: 0 auto;
+        }
+
+        .header-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 28px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border-top: 5px solid var(--senac-blue);
+        }
+
+        .meta-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+
+        .badge-senac {
+            background-color: #EBF3FA;
+            color: var(--senac-blue);
+        }
+
+        .badge-uc {
+            background-color: #E2E8F0;
+            color: #334155;
+        }
+
+        .badge-date {
+            background-color: #FEF3C7;
+            color: #92400E;
+        }
+
+        h1 {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--senac-navy);
+            line-height: 1.3;
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .section-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 28px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+
+        h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--senac-navy);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        h3 {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--senac-blue);
+            margin: 24px 0 12px;
+        }
+
+        p {
+            margin-bottom: 16px;
+            color: #334155;
+        }
+
+        .pillars-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .pillar-card {
+            background-color: #F8FAFC;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            transition: border-color 0.2s ease;
+        }
+
+        .pillar-card:hover {
+            border-color: var(--accent-blue);
+        }
+
+        .pillar-num {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 700;
+            background-color: var(--senac-blue);
+            color: #FFFFFF;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .pillar-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--senac-navy);
+            margin-bottom: 8px;
+        }
+
+        .pillar-desc {
+            font-size: 14px;
+            color: #475569;
+            line-height: 1.5;
+            margin-bottom: 0;
+        }
+
+        .diagram-box {
+            background-color: #F1F5F9;
+            border: 1px solid #CBD5E1;
+            border-radius: 8px;
+            padding: 24px;
+            margin: 24px 0;
+            text-align: center;
+        }
+
+        .diagram-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .diagram-node {
+            background: #FFFFFF;
+            border: 1.5px solid #94A3B8;
+            border-radius: 6px;
+            padding: 12px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--senac-navy);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .diagram-node.highlight {
+            border-color: var(--senac-blue);
+            background-color: #EBF3FA;
+            color: var(--senac-blue);
+            font-weight: 700;
+        }
+
+        .diagram-arrow {
+            font-size: 18px;
+            color: #64748B;
+            font-weight: bold;
+        }
+
+        .alert {
+            border-left: 4px solid;
+            border-radius: 0 8px 8px 0;
+            padding: 16px 20px;
+            margin: 20px 0;
+            font-size: 14.5px;
+        }
+
+        .alert-info {
+            background-color: var(--alert-blue-bg);
+            border-left-color: var(--alert-blue-border);
+            color: #0369A1;
+        }
+
+        .alert-warning {
+            background-color: var(--alert-amber-bg);
+            border-left-color: var(--alert-amber-border);
+            color: #92400E;
+        }
+
+        .alert-success {
+            background-color: var(--alert-emerald-bg);
+            border-left-color: var(--alert-emerald-border);
+            color: #065F46;
+        }
+
+        .alert strong {
+            font-weight: 700;
+        }
+
+        .code-block {
+            background-color: var(--code-bg);
+            border-radius: 8px;
+            margin: 16px 0 24px;
+            overflow: hidden;
+            border: 1px solid #1E293B;
+        }
+
+        .code-header {
+            background-color: #1E293B;
+            color: #94A3B8;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            font-weight: 500;
+            padding: 8px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #334155;
+        }
+
+        pre {
+            padding: 16px;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13.5px;
+            line-height: 1.6;
+            color: var(--code-text);
+        }
+
+        code {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .inline-code {
+            background-color: #E2E8F0;
+            color: #0F172A;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 13.5px;
+            font-weight: 500;
+        }
+
+        /* SQL Syntax Highlighting */
+        .sql-kw { color: #38BDF8; font-weight: 600; }
+        .sql-fn { color: #FBBF24; }
+        .sql-str { color: #4ADE80; }
+        .sql-cm { color: #64748B; font-style: italic; }
+        .sql-tbl { color: #E2E8F0; font-weight: 500; }
+
+        .step-list {
+            list-style: none;
+            counter-reset: step-counter;
+            margin: 20px 0;
+        }
+
+        .step-item {
+            counter-increment: step-counter;
+            position: relative;
+            padding-left: 48px;
+            margin-bottom: 24px;
+        }
+
+        .step-item::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 32px;
+            height: 32px;
+            background-color: var(--senac-blue);
+            color: #FFFFFF;
+            font-size: 14px;
+            font-weight: 700;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .step-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--senac-navy);
+            margin-bottom: 6px;
+        }
+
+        .step-body {
+            font-size: 14.5px;
+            color: #475569;
+        }
+
+        .challenge-box {
+            background-color: #F8FAFC;
+            border: 2px solid #CBD5E1;
+            border-radius: 8px;
+            padding: 24px;
+            margin-top: 24px;
+        }
+
+        .challenge-header {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--senac-navy);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .task-list {
+            list-style: none;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 12px;
+            font-size: 14.5px;
+            color: #334155;
+        }
+
+        .task-checkbox {
+            margin-top: 4px;
+            accent-color: var(--senac-blue);
+            width: 16px;
+            height: 16px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        @media (max-width: 640px) {
+            body { padding: 16px 8px; }
+            .header-card, .section-card { padding: 20px; }
+            .pillars-grid { grid-template-columns: 1fr; }
+            .diagram-flow { flex-direction: column; }
+            .diagram-arrow { transform: rotate(90deg); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Header -->
+    <header class="header-card">
+        <div class="meta-badges">
+            <span class="badge badge-senac">Senac Ribeirão Preto • TDS</span>
+            <span class="badge badge-uc">UC3: Modelar e Estruturar Banco de Dados</span>
+            <span class="badge badge-date">Aula 10 • 17/08/2026</span>
+        </div>
+        <h1>Materialização Física dos Projetos Integradores — Criando as Tabelas no MySQL</h1>
+        <p class="subtitle">Transformação dos diagramas conceituais (DER/MER) e Dicionário de Dados do Projeto Integrador em scripts DDL físicos, auditoria visual com o Designer do phpMyAdmin e carga de testes com o Prof. Haroldo Curti e Prof. Facine.</p>
+    </header>
+
+    <!-- Section 1: Checklist Pré-Implementação -->
+    <section class="section-card">
+        <h2>1. Checklist Pré-Implementação: Do Papel para o SQL</h2>
+        <p>Hoje é o grande momento de conectar toda a teoria de modelagem ao software real do seu <strong>Projeto Integrador</strong>. Antes de rodar os comandos <span class="inline-code">CREATE TABLE</span>, valide com sua dupla os 4 pilares estruturais:</p>
+
+        <div class="pillars-grid">
+            <div class="pillar-card">
+                <span class="pillar-num">Pilar 1</span>
+                <div class="pillar-title">Precedência de Criação</div>
+                <p class="pillar-desc">Crie sempre as tabelas independentes (pais) antes das tabelas dependentes (filhas). Nenhuma FK pode apontar para uma tabela inexistente.</p>
+            </div>
+
+            <div class="pillar-card">
+                <span class="pillar-num">Pilar 2</span>
+                <div class="pillar-title">Tipagem Física Precisa</div>
+                <p class="pillar-desc">IDs com <span class="inline-code">INT UNSIGNED AUTO_INCREMENT</span>, textos com <span class="inline-code">VARCHAR(100)</span> e valores monetários rigorosamente em <span class="inline-code">DECIMAL(10,2)</span>.</p>
+            </div>
+
+            <div class="pillar-card">
+                <span class="pillar-num">Pilar 3</span>
+                <div class="pillar-title">Integridade de Tipos nas FKs</div>
+                <p class="pillar-desc">O tipo de dado e atributo da Chave Estrangeira deve ser <strong>idêntico</strong> ao da Chave Primária referenciada (<span class="inline-code">INT UNSIGNED</span> com <span class="inline-code">INT UNSIGNED</span>).</p>
+            </div>
+
+            <div class="pillar-card">
+                <span class="pillar-num">Pilar 4</span>
+                <div class="pillar-title">Motor & Charset Padrão</div>
+                <p class="pillar-desc">Finalize todas as tabelas com <span class="inline-code">ENGINE=InnoDB</span> e banco com <span class="inline-code">CHARACTER SET utf8mb4</span>.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: Template do Script -->
+    <section class="section-card">
+        <h2>2. Estrutura Padrão do Script DDL do Projeto (<span class="inline-code">banco_projeto.sql</span>)</h2>
+        <p>Utilize o esqueleto profissional abaixo como referência para estruturar o banco da sua equipe:</p>
+
+        <div class="code-block">
+            <div class="code-header">
+                <span>SQL • Script DDL Padrão de Projeto Integrador</span>
+                <span>MySQL</span>
+            </div>
+            <pre><span class="sql-kw">SET NAMES</span> utf8mb4;
+
+<span class="sql-kw">DROP DATABASE IF EXISTS</span> db_meu_projeto;
+<span class="sql-kw">CREATE DATABASE</span> db_meu_projeto 
+  <span class="sql-kw">CHARACTER SET</span> utf8mb4 
+  <span class="sql-kw">COLLATE</span> utf8mb4_unicode_ci;
+
+<span class="sql-kw">USE</span> db_meu_projeto;
+
+<span class="sql-cm">-- --------------------------------------------------------------------</span>
+<span class="sql-cm">-- 1. TABELAS INDEPENDENTES (PAIS)</span>
+<span class="sql-cm">-- --------------------------------------------------------------------</span>
+
+<span class="sql-kw">CREATE TABLE</span> clientes (
+    id_cliente <span class="sql-kw">INT UNSIGNED AUTO_INCREMENT PRIMARY KEY</span>,
+    nome <span class="sql-kw">VARCHAR</span>(120) <span class="sql-kw">NOT NULL</span>,
+    cpf <span class="sql-kw">CHAR</span>(11) <span class="sql-kw">NOT NULL UNIQUE</span>,
+    email <span class="sql-kw">VARCHAR</span>(100) <span class="sql-kw">NOT NULL UNIQUE</span>,
+    telefone <span class="sql-kw">VARCHAR</span>(20),
+    data_cadastro <span class="sql-kw">DATETIME DEFAULT CURRENT_TIMESTAMP</span>
+) <span class="sql-kw">ENGINE</span>=InnoDB;
+
+<span class="sql-kw">CREATE TABLE</span> categorias (
+    id_categoria <span class="sql-kw">INT UNSIGNED AUTO_INCREMENT PRIMARY KEY</span>,
+    nome_categoria <span class="sql-kw">VARCHAR</span>(60) <span class="sql-kw">NOT NULL UNIQUE</span>,
+    descricao <span class="sql-kw">VARCHAR</span>(255)
+) <span class="sql-kw">ENGINE</span>=InnoDB;
+
+<span class="sql-cm">-- --------------------------------------------------------------------</span>
+<span class="sql-cm">-- 2. TABELAS DEPENDENTES (FILHAS)</span>
+<span class="sql-cm">-- --------------------------------------------------------------------</span>
+
+<span class="sql-kw">CREATE TABLE</span> produtos (
+    id_produto <span class="sql-kw">INT UNSIGNED AUTO_INCREMENT PRIMARY KEY</span>,
+    nome_produto <span class="sql-kw">VARCHAR</span>(150) <span class="sql-kw">NOT NULL</span>,
+    preco <span class="sql-kw">DECIMAL</span>(10,2) <span class="sql-kw">NOT NULL</span>,
+    estoque <span class="sql-kw">INT NOT NULL DEFAULT</span> 0,
+    id_categoria <span class="sql-kw">INT UNSIGNED NOT NULL</span>,
+    <span class="sql-kw">CONSTRAINT</span> fk_categoria_produto 
+        <span class="sql-kw">FOREIGN KEY</span> (id_categoria) <span class="sql-kw">REFERENCES</span> categorias(id_categoria)
+        <span class="sql-kw">ON UPDATE CASCADE ON DELETE RESTRICT</span>
+) <span class="sql-kw">ENGINE</span>=InnoDB;
+
+<span class="sql-kw">CREATE TABLE</span> pedidos (
+    id_pedido <span class="sql-kw">INT UNSIGNED AUTO_INCREMENT PRIMARY KEY</span>,
+    data_pedido <span class="sql-kw">DATETIME DEFAULT CURRENT_TIMESTAMP</span>,
+    status_pedido <span class="sql-kw">ENUM</span>(<span class="sql-str">'Pendente'</span>, <span class="sql-str">'Pago'</span>, <span class="sql-str">'Cancelado'</span>, <span class="sql-str">'Entregue'</span>) <span class="sql-kw">DEFAULT</span> <span class="sql-str">'Pendente'</span>,
+    id_cliente <span class="sql-kw">INT UNSIGNED NOT NULL</span>,
+    <span class="sql-kw">CONSTRAINT</span> fk_cliente_pedido 
+        <span class="sql-kw">FOREIGN KEY</span> (id_cliente) <span class="sql-kw">REFERENCES</span> clientes(id_cliente)
+        <span class="sql-kw">ON UPDATE CASCADE ON DELETE RESTRICT</span>
+) <span class="sql-kw">ENGINE</span>=InnoDB;
+
+<span class="sql-cm">-- --------------------------------------------------------------------</span>
+<span class="sql-cm">-- 3. TABELA ASSOCIATIVA (N:M - ITENS DO PEDIDO)</span>
+<span class="sql-cm">-- --------------------------------------------------------------------</span>
+
+<span class="sql-kw">CREATE TABLE</span> itens_pedido (
+    id_pedido <span class="sql-kw">INT UNSIGNED NOT NULL</span>,
+    id_produto <span class="sql-kw">INT UNSIGNED NOT NULL</span>,
+    quantidade <span class="sql-kw">INT NOT NULL CHECK</span> (quantidade &gt; 0),
+    preco_unitario <span class="sql-kw">DECIMAL</span>(10,2) <span class="sql-kw">NOT NULL</span>,
+    <span class="sql-kw">PRIMARY KEY</span> (id_pedido, id_produto),
+    <span class="sql-kw">CONSTRAINT</span> fk_item_pedido <span class="sql-kw">FOREIGN KEY</span> (id_pedido) <span class="sql-kw">REFERENCES</span> pedidos(id_pedido) <span class="sql-kw">ON DELETE CASCADE</span>,
+    <span class="sql-kw">CONSTRAINT</span> fk_item_produto <span class="sql-kw">FOREIGN KEY</span> (id_produto) <span class="sql-kw">REFERENCES</span> produtos(id_produto) <span class="sql-kw">ON DELETE RESTRICT</span>
+) <span class="sql-kw">ENGINE</span>=InnoDB;</pre>
+        </div>
+    </section>
+
+    <!-- Section 3: Auditoria no Designer -->
+    <section class="section-card">
+        <h2>3. Auditoria Visual com a Ferramenta Designer</h2>
+
+        <ol class="step-list">
+            <li class="step-item">
+                <div class="step-title">Execução do Script na Aba SQL</div>
+                <div class="step-body">Copie seu script DDL completo, cole na aba SQL do phpMyAdmin e clique em <strong>Executar</strong>.</div>
+            </li>
+            <li class="step-item">
+                <div class="step-title">Abertura da Ferramenta Designer</div>
+                <div class="step-body">No menu superior do banco de dados, clique em <strong>Mais ➔ Designer</strong>.</div>
+            </li>
+            <li class="step-item">
+                <div class="step-title">Conferência das Linhas Relacionais</div>
+                <div class="step-body">Organize os cartões das tabelas na tela. Verifique se todas as linhas de chave estrangeira apontam com precisão da coluna de FK para a PK correspondente, confirmando a integridade física do seu Projeto Integrador.</div>
+            </li>
+        </ol>
+    </section>
+
+    <!-- Section 4: Desafio de Bancada -->
+    <section class="section-card">
+        <h2>4. Desafio de Bancada da Aula 10</h2>
+
+        <div class="challenge-box">
+            <div class="challenge-header">
+                📋 Checklist de Atividades Práticas:
+            </div>
+            <ul class="task-list">
+                <li class="task-item">
+                    <input type="checkbox" class="task-checkbox" id="t1">
+                    <label for="t1"><strong>Tarefa 1:</strong> Redigir o arquivo <span class="inline-code">banco_projeto.sql</span> com 100% das tabelas do Projeto Integrador.</label>
+                </li>
+                <li class="task-item">
+                    <input type="checkbox" class="task-checkbox" id="t2">
+                    <label for="t2"><strong>Tarefa 2:</strong> Executar o script no phpMyAdmin e validar na ferramenta Designer as ligações de chave estrangeira.</label>
+                </li>
+                <li class="task-item">
+                    <input type="checkbox" class="task-checkbox" id="t3">
+                    <label for="t3"><strong>Tarefa 3:</strong> Inserir ao menos 3 linhas de teste em cada tabela do banco para atestar a consistência dos dados.</label>
+                </li>
+                <li class="task-item">
+                    <input type="checkbox" class="task-checkbox" id="t4">
+                    <label for="t4"><strong>Tarefa 4:</strong> Fazer o commit e push do script <span class="inline-code">banco_projeto.sql</span> no repositório GitHub da sua equipe.</label>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p><strong>Curso Técnico em Desenvolvimento de Sistemas • Senac Ribeirão Preto</strong><br>Unidade Curricular 3: Modelar e Estruturar Banco de Dados • Docente: Haroldo Curti</p>
+    </footer>
+
+</div>
+
+</body>
+</html>

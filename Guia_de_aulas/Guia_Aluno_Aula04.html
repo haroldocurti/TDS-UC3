@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia da Aula 04 - Validação do DER, MER e Dicionário de Dados | Senac TDS01</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --senac-navy: #0F2137;
+            --senac-blue: #004B8D;
+            --senac-orange: #F37021;
+            --accent-blue: #0284C7;
+            --accent-teal: #0D9488;
+            --bg-main: #F8FAFC;
+            --bg-card: #FFFFFF;
+            --text-main: #1E293B;
+            --text-muted: #64748B;
+            --border-color: #E2E8F0;
+            --border-focus: #94A3B8;
+            --code-bg: #0F172A;
+            --code-text: #E2E8F0;
+            --alert-blue-bg: #F0F9FF;
+            --alert-blue-border: #0284C7;
+            --alert-amber-bg: #FFFBEB;
+            --alert-amber-border: #D97706;
+            --alert-emerald-bg: #F0FDF4;
+            --alert-emerald-border: #10B981;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.65;
+            font-size: 16px;
+            padding: 32px 16px 80px;
+        }
+
+        .container {
+            max-width: 920px;
+            margin: 0 auto;
+        }
+
+        .header-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 28px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border-top: 5px solid var(--senac-blue);
+        }
+
+        .meta-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+
+        .badge-senac {
+            background-color: #EBF3FA;
+            color: var(--senac-blue);
+        }
+
+        .badge-uc {
+            background-color: #E2E8F0;
+            color: #334155;
+        }
+
+        .badge-date {
+            background-color: #FEF3C7;
+            color: #92400E;
+        }
+
+        h1 {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--senac-navy);
+            line-height: 1.3;
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .section-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 28px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+
+        h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--senac-navy);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        h3 {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--senac-blue);
+            margin: 24px 0 12px;
+        }
+
+        p {
+            margin-bottom: 16px;
+            color: #334155;
+        }
+
+        .pillars-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .pillar-card {
+            background-color: #F8FAFC;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            transition: border-color 0.2s ease;
+        }
+
+        .pillar-card:hover {
+            border-color: var(--accent-blue);
+        }
+
+        .pillar-num {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 700;
+            background-color: var(--senac-blue);
+            color: #FFFFFF;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .pillar-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--senac-navy);
+            margin-bottom: 8px;
+        }
+
+        .pillar-desc {
+            font-size: 14px;
+            color: #475569;
+            line-height: 1.5;
+            margin-bottom: 0;
+        }
+
+        .diagram-box {
+            background-color: #F1F5F9;
+            border: 1px solid #CBD5E1;
+            border-radius: 8px;
+            padding: 24px;
+            margin: 24px 0;
+            text-align: center;
+        }
+
+        .diagram-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .diagram-node {
+            background: #FFFFFF;
+            border: 1.5px solid #94A3B8;
+            border-radius: 6px;
+            padding: 12px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--senac-navy);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .diagram-node.highlight {
+            border-color: var(--senac-blue);
+            background-color: #EBF3FA;
+            color: var(--senac-blue);
+            font-weight: 700;
+        }
+
+        .diagram-arrow {
+            font-size: 18px;
+            color: #64748B;
+            font-weight: bold;
+        }
+
+        .alert {
+            border-left: 4px solid;
+            border-radius: 0 8px 8px 0;
+            padding: 16px 20px;
+            margin: 20px 0;
+            font-size: 14.5px;
+        }
+
+        .alert-info {
+            background-color: var(--alert-blue-bg);
+            border-left-color: var(--alert-blue-border);
+            color: #0369A1;
+        }
+
+        .alert-warning {
+            background-color: var(--alert-amber-bg);
+            border-left-color: var(--alert-amber-border);
+            color: #92400E;
+        }
+
+        .alert-success {
+            background-color: var(--alert-emerald-bg);
+            border-left-color: var(--alert-emerald-border);
+            color: #065F46;
+        }
+
+        .alert strong {
+            font-weight: 700;
+        }
+
+        .code-block {
+            background-color: var(--code-bg);
+            border-radius: 8px;
+            margin: 16px 0 24px;
+            overflow: hidden;
+            border: 1px solid #1E293B;
+        }
+
+        .code-header {
+            background-color: #1E293B;
+            color: #94A3B8;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            font-weight: 500;
+            padding: 8px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #334155;
+        }
+
+        pre {
+            padding: 16px;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13.5px;
+            line-height: 1.6;
+            color: var(--code-text);
+        }
+
+        code {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .inline-code {
+            background-color: #E2E8F0;
+            color: #0F172A;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 13.5px;
+            font-weight: 500;
+        }
+
+        .step-list {
+            list-style: none;
+            counter-reset: step-counter;
+            margin: 20px 0;
+        }
+
+        .step-item {
+            counter-increment: step-counter;
+            position: relative;
+            padding-left: 48px;
+            margin-bottom: 24px;
+        }
+
+        .step-item::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 32px;
+            height: 32px;
+            background-color: var(--senac-blue);
+            color: #FFFFFF;
+            font-size: 14px;
+            font-weight: 700;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .step-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--senac-navy);
+            margin-bottom: 6px;
+        }
+
+        .step-body {
+            font-size: 14.5px;
+            color: #475569;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 20px 0;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #F1F5F9;
+            color: var(--senac-navy);
+            font-weight: 700;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+            color: #334155;
+            vertical-align: top;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:nth-child(even) {
+            background-color: #F8FAFC;
+        }
+
+        .challenge-box {
+            background-color: #F8FAFC;
+            border: 2px solid #CBD5E1;
+            border-radius: 8px;
+            padding: 24px;
+            margin-top: 24px;
+        }
+
+        .challenge-header {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--senac-navy);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .task-list {
+            list-style: none;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 12px;
+            font-size: 14.5px;
+            color: #334155;
+        }
+
+        .task-checkbox {
+            margin-top: 4px;
+            accent-color: var(--senac-blue);
+            width: 16px;
+            height: 16px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        @media (max-width: 640px) {
+            body { padding: 16px 8px; }
+            .header-card, .section-card { padding: 20px; }
+            .pillars-grid { grid-template-columns: 1fr; }
+            .diagram-flow { flex-direction: column; }
+            .diagram-arrow { transform: rotate(90deg); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Header -->
+    <header class="header-card">
+        <div class="meta-badges">
+            <span class="badge badge-senac">Senac Ribeirão Preto • TDS</span>
+            <span class="badge badge-uc">UC3: Modelar e Estruturar Banco de Dados</span>
+            <span class="badge badge-date">Aula 04 • 27/07/2026</span>
+        </div>
+        <h1>Validação do DER, MER e Dicionário de Dados da UC1</h1>
+        <p class="subtitle">Auditoria técnica da modelagem conceitual e lógica, padronização de nomenclatura em snake_case e especificação dos contratos de tipos físicos de dados em MySQL.</p>
+    </header>
+
+    <!-- Section 1: Transição Conceitual -> Lógico -->
+    <section class="section-card">
+        <h2>1. Da Modelagem Conceitual (DER) ao Modelo Lógico (MER)</h2>
+        <p>Na UC1, você desenhou os primeiros diagramas conceituais do seu sistema. Hoje faremos uma auditoria técnica profunda para garantir que os modelos estejam 100% alinhados ao Minimundo homologado e prontos para se tornarem tabelas físicas no MySQL.</p>
+
+        <div class="diagram-box">
+            <p style="font-size: 13px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">A Escala de Abstração da Modelagem</p>
+            <div class="diagram-flow">
+                <div class="diagram-node">
+                    📄 Minimundo<br><small>Regras em texto puro</small>
+                </div>
+                <div class="diagram-arrow">➔</div>
+                <div class="diagram-node">
+                    🔷 DER (Conceitual)<br><small>Entidades & Relacionamentos</small>
+                </div>
+                <div class="diagram-arrow">➔</div>
+                <div class="diagram-node highlight">
+                    📊 MER (Lógico)<br><small>Tabelas, Colunas, PKs & FKs</small>
+                </div>
+                <div class="diagram-arrow">➔</div>
+                <div class="diagram-node">
+                    📖 Dicionário de Dados<br><small>Tipos, Tamanhos & Regras SQL</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="pillars-grid">
+            <div class="pillar-card">
+                <span class="pillar-num">Regra 1</span>
+                <div class="pillar-title">Chaves Primárias (PK)</div>
+                <p class="pillar-desc">Toda tabela deve ter uma coluna identificadora única (ex: <span class="inline-code">id</span> ou <span class="inline-code">id_cliente</span>) garantindo que nenhuma linha seja idêntica a outra.</p>
+            </div>
+            <div class="pillar-card">
+                <span class="pillar-num">Regra 2</span>
+                <div class="pillar-title">Chaves Estrangeiras (FK)</div>
+                <p class="pillar-desc">Nos vínculos 1:N (Um para Muitos), a Chave Estrangeira sempre é posicionada na tabela dependente (lado N).</p>
+            </div>
+            <div class="pillar-card">
+                <span class="pillar-num">Regra 3</span>
+                <div class="pillar-title">Relações N:N (Muitos para Muitos)</div>
+                <p class="pillar-desc">Nunca são implementadas diretamente: desmembram-se em uma tabela associativa intermediária com as PKs compostas.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: Dicionário de Dados -->
+    <section class="section-card">
+        <h2>2. O Dicionário de Dados: O Contrato Técnico</h2>
+        <p>O <strong>Dicionário de Dados</strong> é o documento técnico de referência onde cada campo físico do banco tem seu tipo, restrições e finalidade minuciosamente definidos antes de rodar os scripts DDL.</p>
+
+        <div class="alert alert-info">
+            <strong>Padrão de Nomenclatura Recomendado:</strong> Utilize sempre <strong>snake_case</strong> em letras minúsculas (ex: <span class="inline-code">data_nascimento</span>, <span class="inline-code">preco_unitario</span>, <span class="inline-code">status_pagamento</span>). Evite acentuação, espaços e caracteres especiais em nomes de tabelas ou colunas.
+        </div>
+
+        <h3>Exemplo de Especificação: Tabela <span class="inline-code">clientes</span></h3>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nome da Coluna</th>
+                        <th>Tipo de Dado</th>
+                        <th>Tamanho</th>
+                        <th>Obrigatório (NOT NULL)</th>
+                        <th>Chave (PK/FK)</th>
+                        <th>Descrição / Regra de Negócio</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="inline-code">id</span></td>
+                        <td><span class="inline-code">INT UNSIGNED</span></td>
+                        <td>-</td>
+                        <td>SIM</td>
+                        <td><strong>PK</strong> (Auto Increment)</td>
+                        <td>Identificador numérico exclusivo do cliente.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="inline-code">nome</span></td>
+                        <td><span class="inline-code">VARCHAR</span></td>
+                        <td>120</td>
+                        <td>SIM</td>
+                        <td>-</td>
+                        <td>Nome completo do titular da conta.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="inline-code">email</span></td>
+                        <td><span class="inline-code">VARCHAR</span></td>
+                        <td>100</td>
+                        <td>SIM</td>
+                        <td><strong>UNIQUE</strong></td>
+                        <td>E-mail de autenticação e comunicação.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="inline-code">cpf</span></td>
+                        <td><span class="inline-code">CHAR</span></td>
+                        <td>11</td>
+                        <td>SIM</td>
+                        <td><strong>UNIQUE</strong></td>
+                        <td>CPF gravado apenas com números (sem traços/pontos).</td>
+                    </tr>
+                    <tr>
+                        <td><span class="inline-code">data_cadastro</span></td>
+                        <td><span class="inline-code">DATETIME</span></td>
+                        <td>-</td>
+                        <td>SIM</td>
+                        <td>-</td>
+                        <td>Data e hora exata do cadastro no sistema.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Section 3: Tipos de Dados SQL -->
+    <section class="section-card">
+        <h2>3. Guia de Escolha dos Tipos de Dados no MySQL</h2>
+        <p>A escolha correta do tipo de dado economiza gigabytes em disco e memória RAM, além de acelerar as buscas do banco de dados:</p>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 20%;">Tipo SQL</th>
+                        <th style="width: 50%;">Quando Utilizar?</th>
+                        <th style="width: 30%;">Exemplo Prático</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="inline-code">INT UNSIGNED</span></td>
+                        <td>Números inteiros positivos (IDs, quantidades, contadores).</td>
+                        <td><span class="inline-code">id INT UNSIGNED</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="inline-code">VARCHAR(N)</span></td>
+                        <td>Textos de tamanho variável até N caracteres (nomes, endereços).</td>
+                        <td><span class="inline-code">cidade VARCHAR(80)</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="inline-code">CHAR(N)</span></td>
+                        <td>Textos de tamanho fixo exato (sigla UF, CPF puro, CEP).</td>
+                        <td><span class="inline-code">estado CHAR(2)</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="inline-code">DECIMAL(M, D)</span></td>
+                        <td>Valores monetários e números de precisão exata (nunca use FLOAT).</td>
+                        <td><span class="inline-code">preco DECIMAL(10,2)</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="inline-code">DATE</span></td>
+                        <td>Datas simples sem informação de horário.</td>
+                        <td><span class="inline-code">data_nascimento DATE</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="inline-code">DATETIME</span></td>
+                        <td>Data e hora completas para registros de transação e logs.</td>
+                        <td><span class="inline-code">data_pedido DATETIME</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="inline-code">BOOLEAN / TINYINT(1)</span></td>
+                        <td>Estados binários de Verdadeiro (1) ou Falso (0).</td>
+                        <td><span class="inline-code">ativo BOOLEAN</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Section 4: Roteiro e Versionamento -->
+    <section class="section-card">
+        <h2>4. Roteiro de Auditoria e Versionamento no GitHub</h2>
+
+        <ol class="step-list">
+            <li class="step-item">
+                <div class="step-title">Resgate do Acervo da UC1</div>
+                <div class="step-body">Abra os diagramas DER/MER desenhados no brModel, draw.io ou fotos de quadro da UC1 e compare diretamente com o <span class="inline-code">minimundo.md</span> homologado na Aula 03.</div>
+            </li>
+            <li class="step-item">
+                <div class="step-title">Construção do Dicionário de Dados do Projeto</div>
+                <div class="step-body">Em dupla, crie as tabelas de especificação de todas as entidades do seu projeto em um arquivo chamado <span class="inline-code">dicionario_dados.md</span>.</div>
+            </li>
+            <li class="step-item">
+                <div class="step-title">Validação com o Docente e Versionamento</div>
+                <div class="step-body">
+                    Apresente a documentação ao professor Haroldo Curti. Após a validação, faça commit e push:
+                    <div class="code-block" style="margin-top: 12px;">
+                        <div class="code-header">
+                            <span>Terminal • Git Commit</span>
+                            <span>Bash / PowerShell</span>
+                        </div>
+                        <pre><code>git add dicionario_dados.md
+git commit -m "docs: valida dicionario de dados e modelos da UC1"
+git push origin main</code></pre>
+                    </div>
+                </div>
+            </li>
+        </ol>
+    </section>
+
+    <!-- Section 5: Desafio de Bancada -->
+    <section class="section-card">
+        <h2>5. Desafio de Bancada da Aula 04</h2>
+
+        <div class="challenge-box">
+            <div class="challenge-header">
+                📋 Checklist de Atividades Práticas:
+            </div>
+            <ul class="task-list">
+                <li class="task-item">
+                    <input type="checkbox" class="task-checkbox" id="t1">
+                    <label for="t1"><strong>Tarefa 1:</strong> Verificar se todas as tabelas possuem Chave Primária (<span class="inline-code">PK</span>) e se as Chaves Estrangeiras (<span class="inline-code">FK</span>) estão no lado dependente.</label>
+                </li>
+                <li class="task-item">
+                    <input type="checkbox" class="task-checkbox" id="t2">
+                    <label for="t2"><strong>Tarefa 2:</strong> Desmembrar qualquer relacionamento N:N em tabela associativa intermediária com as respectivas chaves.</label>
+                </li>
+                <li class="task-item">
+                    <input type="checkbox" class="task-checkbox" id="t3">
+                    <label for="t3"><strong>Tarefa 3:</strong> Redigir o arquivo <span class="inline-code">dicionario_dados.md</span> contendo todas as colunas, tipos SQL, tamanhos e restrições em snake_case.</label>
+                </li>
+                <li class="task-item">
+                    <input type="checkbox" class="task-checkbox" id="t4">
+                    <label for="t4"><strong>Tarefa 4:</strong> Subir o Dicionário de Dados validado no repositório GitHub da sua equipe.</label>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p><strong>Curso Técnico em Desenvolvimento de Sistemas • Senac Ribeirão Preto</strong><br>Unidade Curricular 3: Modelar e Estruturar Banco de Dados • Docente: Haroldo Curti</p>
+    </footer>
+
+</div>
+
+</body>
+</html>

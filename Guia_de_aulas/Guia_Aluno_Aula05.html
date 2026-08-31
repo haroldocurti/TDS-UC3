@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia da Aula 05 - Do Minimundo à Normalização e Primeiro Acesso ao phpMyAdmin | Senac TDS01</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --senac-navy: #0F2137;
+            --senac-blue: #004B8D;
+            --senac-orange: #F37021;
+            --accent-blue: #0284C7;
+            --accent-teal: #0D9488;
+            --bg-main: #F8FAFC;
+            --bg-card: #FFFFFF;
+            --text-main: #1E293B;
+            --text-muted: #64748B;
+            --border-color: #E2E8F0;
+            --border-focus: #94A3B8;
+            --code-bg: #0F172A;
+            --code-text: #E2E8F0;
+            --alert-blue-bg: #F0F9FF;
+            --alert-blue-border: #0284C7;
+            --alert-amber-bg: #FFFBEB;
+            --alert-amber-border: #D97706;
+            --alert-emerald-bg: #F0FDF4;
+            --alert-emerald-border: #10B981;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.65;
+            font-size: 16px;
+            padding: 32px 16px 80px;
+        }
+
+        .container {
+            max-width: 920px;
+            margin: 0 auto;
+        }
+
+        .header-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 28px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border-top: 5px solid var(--senac-blue);
+        }
+
+        .meta-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+
+        .badge-senac {
+            background-color: #EBF3FA;
+            color: var(--senac-blue);
+        }
+
+        .badge-uc {
+            background-color: #E2E8F0;
+            color: #334155;
+        }
+
+        .badge-date {
+            background-color: #FEF3C7;
+            color: #92400E;
+        }
+
+        h1 {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--senac-navy);
+            line-height: 1.3;
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .section-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 28px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+
+        h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--senac-navy);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        h3 {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--senac-blue);
+            margin: 24px 0 12px;
+        }
+
+        p {
+            margin-bottom: 16px;
+            color: #334155;
+        }
+
+        .pillars-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .pillar-card {
+            background-color: #F8FAFC;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            transition: border-color 0.2s ease;
+        }
+
+        .pillar-card:hover {
+            border-color: var(--accent-blue);
+        }
+
+        .pillar-num {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 700;
+            background-color: var(--senac-blue);
+            color: #FFFFFF;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .pillar-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--senac-navy);
+            margin-bottom: 8px;
+        }
+
+        .pillar-desc {
+            font-size: 14px;
+            color: #475569;
+            line-height: 1.5;
+            margin-bottom: 0;
+        }
+
+        .diagram-box {
+            background-color: #F1F5F9;
+            border: 1px solid #CBD5E1;
+            border-radius: 8px;
+            padding: 24px;
+            margin: 24px 0;
+            text-align: center;
+        }
+
+        .diagram-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .diagram-node {
+            background: #FFFFFF;
+            border: 1.5px solid #94A3B8;
+            border-radius: 6px;
+            padding: 12px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--senac-navy);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .diagram-node.highlight {
+            border-color: var(--senac-blue);
+            background-color: #EBF3FA;
+            color: var(--senac-blue);
+            font-weight: 700;
+        }
+
+        .diagram-arrow {
+            font-size: 18px;
+            color: #64748B;
+            font-weight: bold;
+        }
+
+        .alert {
+            border-left: 4px solid;
+            border-radius: 0 8px 8px 0;
+            padding: 16px 20px;
+            margin: 20px 0;
+            font-size: 14.5px;
+        }
+
+        .alert-info {
+            background-color: var(--alert-blue-bg);
+            border-left-color: var(--alert-blue-border);
+            color: #0369A1;
+        }
+
+        .alert-warning {
+            background-color: var(--alert-amber-bg);
+            border-left-color: var(--alert-amber-border);
+            color: #92400E;
+        }
+
+        .alert-success {
+            background-color: var(--alert-emerald-bg);
+            border-left-color: var(--alert-emerald-border);
+            color: #065F46;
+        }
+
+        .alert strong {
+            font-weight: 700;
+        }
+
+        .step-list {
+            list-style: none;
+            counter-reset: step-counter;
+            margin: 20px 0;
+        }
+
+        .step-item {
+            counter-increment: step-counter;
+            position: relative;
+            padding-left: 48px;
+            margin-bottom: 24px;
+        }
+
+        .step-item::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 32px;
+            height: 32px;
+            background-color: var(--senac-blue);
+            color: #FFFFFF;
+            font-size: 14px;
+            font-weight: 700;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .step-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--senac-navy);
+            margin-bottom: 6px;
+        }
+
+        .step-body {
+            font-size: 14.5px;
+            color: #475569;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 20px 0;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #F1F5F9;
+            color: var(--senac-navy);
+            font-weight: 700;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+            color: #334155;
+            vertical-align: top;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:nth-child(even) {
+            background-color: #F8FAFC;
+        }
+
+        .inline-code {
+            background-color: #E2E8F0;
+            color: #0F172A;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 13.5px;
+            font-weight: 500;
+        }
+
+        .challenge-box {
+            background-color: #F8FAFC;
+            border: 2px solid #CBD5E1;
+            border-radius: 8px;
+            padding: 24px;
+            margin-top: 24px;
+        }
+
+        .challenge-header {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--senac-navy);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .task-list {
+            list-style: none;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 12px;
+            font-size: 14.5px;
+            color: #334155;
+        }
+
+        .task-checkbox {
+            margin-top: 4px;
+            accent-color: var(--senac-blue);
+            width: 16px;
+            height: 16px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        @media (max-width: 640px) {
+            body { padding: 16px 8px; }
+            .header-card, .section-card { padding: 20px; }
+            .pillars-grid { grid-template-columns: 1fr; }
+            .diagram-flow { flex-direction: column; }
+            .diagram-arrow { transform: rotate(90deg); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Header -->
+    <header class="header-card">
+        <div class="meta-badges">
+            <span class="badge badge-senac">Senac Ribeirão Preto • TDS</span>
+            <span class="badge badge-uc">UC3: Modelar e Estruturar Banco de Dados</span>
+            <span class="badge badge-date">Aula 05 • 03/08/2026</span>
+        </div>
+        <h1>Do Minimundo à Normalização e Primeiro Acesso ao phpMyAdmin</h1>
+        <p class="subtitle">O pipeline da engenharia de dados, aplicação prática das Formas Normais (1FN, 2FN e 3FN) para eliminação de anomalias e primeiro login na interface do SGBD MySQL.</p>
+    </header>
+
+    <!-- Section 1: Pipeline da Engenharia de Dados -->
+    <section class="section-card">
+        <h2>1. O Pipeline da Engenharia de Dados</h2>
+        <p>Até aqui, construímos toda a base conceitual do nosso banco de dados. Hoje compreendemos a esteira completa que um requisito percorre até se transformar em tabelas físicas livres de duplicação:</p>
+
+        <div class="diagram-box">
+            <p style="font-size: 13px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">O Pipeline da Engenharia de Dados</p>
+            <div class="diagram-flow">
+                <div class="diagram-node">
+                    1. Minimundo<br><small>Regras em texto</small>
+                </div>
+                <div class="diagram-arrow">➔</div>
+                <div class="diagram-node">
+                    2. DER<br><small>Conceitual</small>
+                </div>
+                <div class="diagram-arrow">➔</div>
+                <div class="diagram-node">
+                    3. MER<br><small>Lógico</small>
+                </div>
+                <div class="diagram-arrow">➔</div>
+                <div class="diagram-node">
+                    4. Dicionário<br><small>Tipos & Regras</small>
+                </div>
+                <div class="diagram-arrow">➔</div>
+                <div class="diagram-node highlight">
+                    5. Normalização<br><small>Controle de Qualidade</small>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: As 3 Formas Normais -->
+    <section class="section-card">
+        <h2>2. As Três Formas Normais (1FN, 2FN e 3FN)</h2>
+        <p>A <strong>Normalização</strong> é o controle de qualidade do banco de dados relacional. Seu objetivo primordial é eliminar redundâncias que causam <em>anomalias de inserção, atualização e exclusão</em>.</p>
+
+        <div class="pillars-grid">
+            <div class="pillar-card">
+                <span class="pillar-num">1ª Forma Normal (1FN)</span>
+                <div class="pillar-title">Atomicidade dos Valores</div>
+                <p class="pillar-desc"><strong>Regra:</strong> Cada célula deve conter um valor único e indivisível. Proibido agrupar múltiplos telefones ou itens separados por vírgula na mesma coluna.</p>
+                <div class="alert alert-warning" style="margin-top: 12px; padding: 10px; font-size: 13px;">
+                    <strong>Solução:</strong> Criar linhas separadas ou uma tabela vinculada <span class="inline-code">telefones_cliente</span> com FK.
+                </div>
+            </div>
+
+            <div class="pillar-card">
+                <span class="pillar-num">2ª Forma Normal (2FN)</span>
+                <div class="pillar-title">Dependência Total da Chave</div>
+                <p class="pillar-desc"><strong>Regra:</strong> Exige a 1FN. Em tabelas com Chave Primária composta, todo atributo não-chave deve depender de <em>toda</em> a chave primária, e não de apenas uma parte dela.</p>
+                <div class="alert alert-warning" style="margin-top: 12px; padding: 10px; font-size: 13px;">
+                    <strong>Solução:</strong> Mover o nome do produto de <span class="inline-code">itens_pedido</span> para a tabela <span class="inline-code">produtos</span>.
+                </div>
+            </div>
+
+            <div class="pillar-card">
+                <span class="pillar-num">3ª Forma Normal (3FN)</span>
+                <div class="pillar-title">Fim das Dependências Transitivas</div>
+                <p class="pillar-desc"><strong>Regra:</strong> Exige a 2FN. Nenhum atributo não-chave pode depender de outro atributo não-chave (dependência indireta).</p>
+                <div class="alert alert-warning" style="margin-top: 12px; padding: 10px; font-size: 13px;">
+                    <strong>Solução:</strong> Se <span class="inline-code">cidade</span> e <span class="inline-code">estado</span> dependem do <span class="inline-code">cep</span>, o endereço deve ser desacoplado.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: Primeiro Acesso ao phpMyAdmin -->
+    <section class="section-card">
+        <h2>3. Primeiro Acesso e Navegação no phpMyAdmin</h2>
+        <p>O <strong>phpMyAdmin</strong> é uma ferramenta web de interface gráfica que nos permite interagir com o servidor de banco de dados MySQL de forma visual e intuitiva.</p>
+
+        <ol class="step-list">
+            <li class="step-item">
+                <div class="step-title">Acesso ao Servidor no Navegador</div>
+                <div class="step-body">Abra o navegador no laboratório e acesse a URL local indicada pelo professor Haroldo Curti.</div>
+            </li>
+            <li class="step-item">
+                <div class="step-title">Login com Credenciais Individuais</div>
+                <div class="step-body">Insira seu <strong>usuário</strong> e <strong>senha</strong> individuais. No menu lateral esquerdo, localize a base de dados pessoal pré-criada para você.</div>
+            </li>
+            <li class="step-item">
+                <div class="step-title">Reconhecimento das Abas Principais</div>
+                <div class="step-body">
+                    <ul style="margin-left: 20px; margin-top: 6px;">
+                        <li><strong>Aba Estrutura:</strong> Visualiza as tabelas físicas, colunas, tipos e índices.</li>
+                        <li><strong>Aba SQL:</strong> O editor de texto onde digitamos e executamos os comandos <span class="inline-code">CREATE</span>, <span class="inline-code">INSERT</span> e <span class="inline-code">SELECT</span>.</li>
+                        <li><strong>Abas Exportar / Importar:</strong> Para gerar e restaurar backups de scripts <span class="inline-code">.sql</span>.</li>
+                    </ul>
+                </div>
+            </li>
+            <li class="step-item">
+                <div class="step-title">Teste de Conexão com o Servidor</div>
+                <div class="step-body">Selecione seu banco no menu lateral, abra a aba <strong>SQL</strong>, digite <span class="inline-code">SELECT VERSION(), CURRENT_DATE();</span> e clique em <strong>Executar</strong> para validar a resposta ativa do MySQL.</div>
+            </li>
+        </ol>
+    </section>
+
+    <!-- Section 4: Guia de Sobrevivência -->
+    <section class="section-card">
+        <h2>4. Guia de Sobrevivência (Conceitos-Chave)</h2>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 25%;">Conceito</th>
+                        <th style="width: 75%;">Significado na Prática</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Normalização</strong></td>
+                        <td>Conjunto de regras matemáticas que eliminam duplicação e garantem consistência no banco.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>1FN (Atomicidade)</strong></td>
+                        <td>Garante que nenhum campo armazene listas ou vetores de valores na mesma linha.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>2FN (Totalidade da Chave)</strong></td>
+                        <td>Impede que colunas dependam apenas de parte de uma chave primária composta.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>3FN (Fim da Transitividade)</strong></td>
+                        <td>Garante que campos dependam direta e exclusivamente da chave primária (PK).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>phpMyAdmin</strong></td>
+                        <td>Painel de controle visual baseado em navegador para administração de bases MySQL.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Section 5: Desafio de Bancada -->
+    <section class="section-card">
+        <h2>5. Desafio de Bancada da Aula 05</h2>
+
+        <div class="challenge-box">
+            <div class="challenge-header">
+                📋 Checklist de Atividades Práticas:
+            </div>
+            <ul class="task-list">
+                <li class="task-item">
+                    <input type="checkbox" class="task-checkbox" id="t1">
+                    <label for="t1"><strong>Tarefa 1:</strong> Analisar a modelagem do seu projeto em dupla e aplicar as regras da 1FN, 2FN e 3FN.</label>
+                </li>
+                <li class="task-item">
+                    <input type="checkbox" class="task-checkbox" id="t2">
+                    <label for="t2"><strong>Tarefa 2:</strong> Realizar o primeiro login com sucesso no phpMyAdmin com suas credenciais individuais.</label>
+                </li>
+                <li class="task-item">
+                    <input type="checkbox" class="task-checkbox" id="t3">
+                    <label for="t3"><strong>Tarefa 3:</strong> Explorar as abas Estrutura, SQL, Exportar e Importar do painel.</label>
+                </li>
+                <li class="task-item">
+                    <input type="checkbox" class="task-checkbox" id="t4">
+                    <label for="t4"><strong>Tarefa 4:</strong> Executar uma consulta de teste na aba SQL e conferir o retorno do servidor.</label>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p><strong>Curso Técnico em Desenvolvimento de Sistemas • Senac Ribeirão Preto</strong><br>Unidade Curricular 3: Modelar e Estruturar Banco de Dados • Docente: Haroldo Curti</p>
+    </footer>
+
+</div>
+
+</body>
+</html>

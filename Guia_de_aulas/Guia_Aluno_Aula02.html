@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia da Aula 02 - Levantamento de Requisitos e o Minimundo | Senac TDS01</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --senac-navy: #0F2137;
+            --senac-blue: #004B8D;
+            --senac-orange: #F37021;
+            --accent-blue: #0284C7;
+            --accent-teal: #0D9488;
+            --bg-main: #F8FAFC;
+            --bg-card: #FFFFFF;
+            --text-main: #1E293B;
+            --text-muted: #64748B;
+            --border-color: #E2E8F0;
+            --border-focus: #94A3B8;
+            --code-bg: #0F172A;
+            --code-text: #E2E8F0;
+            --alert-blue-bg: #F0F9FF;
+            --alert-blue-border: #0284C7;
+            --alert-amber-bg: #FFFBEB;
+            --alert-amber-border: #D97706;
+            --alert-emerald-bg: #F0FDF4;
+            --alert-emerald-border: #10B981;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.65;
+            font-size: 16px;
+            padding: 32px 16px 80px;
+        }
+
+        .container {
+            max-width: 920px;
+            margin: 0 auto;
+        }
+
+        .header-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 28px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border-top: 5px solid var(--senac-blue);
+        }
+
+        .meta-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+
+        .badge-senac {
+            background-color: #EBF3FA;
+            color: var(--senac-blue);
+        }
+
+        .badge-uc {
+            background-color: #E2E8F0;
+            color: #334155;
+        }
+
+        .badge-date {
+            background-color: #FEF3C7;
+            color: #92400E;
+        }
+
+        h1 {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--senac-navy);
+            line-height: 1.3;
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .section-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 28px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+
+        h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--senac-navy);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        h3 {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--senac-blue);
+            margin: 24px 0 12px;
+        }
+
+        p {
+            margin-bottom: 16px;
+            color: #334155;
+        }
+
+        .pillars-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .pillar-card {
+            background-color: #F8FAFC;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            transition: border-color 0.2s ease;
+        }
+
+        .pillar-card:hover {
+            border-color: var(--accent-blue);
+        }
+
+        .pillar-num {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 700;
+            background-color: var(--senac-blue);
+            color: #FFFFFF;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .pillar-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--senac-navy);
+            margin-bottom: 8px;
+        }
+
+        .pillar-desc {
+            font-size: 14px;
+            color: #475569;
+            line-height: 1.5;
+            margin-bottom: 0;
+        }
+
+        .diagram-box {
+            background-color: #F1F5F9;
+            border: 1px solid #CBD5E1;
+            border-radius: 8px;
+            padding: 24px;
+            margin: 24px 0;
+            text-align: center;
+        }
+
+        .diagram-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .diagram-node {
+            background: #FFFFFF;
+            border: 1.5px solid #94A3B8;
+            border-radius: 6px;
+            padding: 12px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--senac-navy);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .diagram-node.highlight {
+            border-color: var(--senac-blue);
+            background-color: #EBF3FA;
+            color: var(--senac-blue);
+            font-weight: 700;
+        }
+
+        .diagram-arrow {
+            font-size: 18px;
+            color: #64748B;
+            font-weight: bold;
+        }
+
+        .alert {
+            border-left: 4px solid;
+            border-radius: 0 8px 8px 0;
+            padding: 16px 20px;
+            margin: 20px 0;
+            font-size: 14.5px;
+        }
+
+        .alert-info {
+            background-color: var(--alert-blue-bg);
+            border-left-color: var(--alert-blue-border);
+            color: #0369A1;
+        }
+
+        .alert-warning {
+            background-color: var(--alert-amber-bg);
+            border-left-color: var(--alert-amber-border);
+            color: #92400E;
+        }
+
+        .alert-success {
+            background-color: var(--alert-emerald-bg);
+            border-left-color: var(--alert-emerald-border);
+            color: #065F46;
+        }
+
+        .alert strong {
+            font-weight: 700;
+        }
+
+        .code-block {
+            background-color: var(--code-bg);
+            border-radius: 8px;
+            margin: 16px 0 24px;
+            overflow: hidden;
+            border: 1px solid #1E293B;
+        }
+
+        .code-header {
+            background-color: #1E293B;
+            color: #94A3B8;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            font-weight: 500;
+            padding: 8px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #334155;
+        }
+
+        pre {
+            padding: 16px;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13.5px;
+            line-height: 1.6;
+            color: var(--code-text);
+        }
+
+        code {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .inline-code {
+            background-color: #E2E8F0;
+            color: #0F172A;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 13.5px;
+            font-weight: 500;
+        }
+
+        .step-list {
+            list-style: none;
+            counter-reset: step-counter;
+            margin: 20px 0;
+        }
+
+        .step-item {
+            counter-increment: step-counter;
+            position: relative;
+            padding-left: 48px;
+            margin-bottom: 24px;
+        }
+
+        .step-item::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 32px;
+            height: 32px;
+            background-color: var(--senac-blue);
+            color: #FFFFFF;
+            font-size: 14px;
+            font-weight: 700;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .step-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--senac-navy);
+            margin-bottom: 6px;
+        }
+
+        .step-body {
+            font-size: 14.5px;
+            color: #475569;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 20px 0;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #F1F5F9;
+            color: var(--senac-navy);
+            font-weight: 700;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+            color: #334155;
+            vertical-align: top;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:nth-child(even) {
+            background-color: #F8FAFC;
+        }
+
+        .challenge-box {
+            background-color: #F8FAFC;
+            border: 2px solid #CBD5E1;
+            border-radius: 8px;
+            padding: 24px;
+            margin-top: 24px;
+        }
+
+        .challenge-header {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--senac-navy);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .task-list {
+            list-style: none;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 12px;
+            font-size: 14.5px;
+            color: #334155;
+        }
+
+        .task-checkbox {
+            margin-top: 4px;
+            accent-color: var(--senac-blue);
+            width: 16px;
+            height: 16px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        @media (max-width: 640px) {
+            body { padding: 16px 8px; }
+            .header-card, .section-card { padding: 20px; }
+            .pillars-grid { grid-template-columns: 1fr; }
+            .diagram-flow { flex-direction: column; }
+            .diagram-arrow { transform: rotate(90deg); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Header -->
+    <header class="header-card">
+        <div class="meta-badges">
+            <span class="badge badge-senac">Senac Ribeirão Preto • TDS</span>
+            <span class="badge badge-uc">UC3: Modelar e Estruturar Banco de Dados</span>
+            <span class="badge badge-date">Aula 02 • 22/06/2026</span>
+        </div>
+        <h1>Levantamento de Requisitos e a Construção do Minimundo</h1>
+        <p class="subtitle">Metodologia de investigação de escopo em linguagem natural, aplicação das Perguntas Guia e simulação de entrevistas com Role-play e Prompts de Inteligência Artificial.</p>
+    </header>
+
+    <!-- Section 1: O Conceito de Minimundo -->
+    <section class="section-card">
+        <h2>1. O Que é o Minimundo e a Regra de Ouro</h2>
+        <p>Antes de escrevermos qualquer instrução SQL ou desenharmos tabelas, precisamos entender as dores, processos e fluxos da empresa que nos contratou. O <strong>Minimundo</strong> é o recorte textual e resumido da realidade de um negócio que fará parte do sistema de software.</p>
+
+        <div class="alert alert-info">
+            <strong>A Regra de Ouro do Minimundo:</strong> O texto do Minimundo deve ser redigido <strong>estritamente em linguagem natural</strong>, sem qualquer jargão técnico de TI (proibido falar em <em>"tabelas", "chaves primárias", "PK/FK", "varchar" ou "select"</em>). O cliente leigo deve ler o documento e assinar embaixo dizendo: <em>"Exatamente assim que a minha empresa funciona!"</em>.
+        </div>
+
+        <div class="diagram-box">
+            <p style="font-size: 13px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">O Fluxo da Engenharia de Requisitos</p>
+            <div class="diagram-flow">
+                <div class="diagram-node">
+                    🗣️ Entrevista com o Cliente / IA
+                </div>
+                <div class="diagram-arrow">➔</div>
+                <div class="diagram-node highlight">
+                    📄 Minimundo (Linguagem Natural)
+                </div>
+                <div class="diagram-arrow">➔</div>
+                <div class="diagram-node">
+                    📐 Diagramas DER/MER & DDL SQL
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: Os 6 Pilares de Investigação -->
+    <section class="section-card">
+        <h2>2. Os 6 Pilares de Investigação de Requisitos</h2>
+        <p>Para conduzir uma entrevista profissional com o contratante (ou com a IA configurada como cliente), utilize o roteiro das <strong>Perguntas Guia</strong>:</p>
+
+        <div class="pillars-grid">
+            <div class="pillar-card">
+                <span class="pillar-num">Pilar 1</span>
+                <div class="pillar-title">Contexto & Problema Central</div>
+                <p class="pillar-desc">Qual é a dor ou gargalo principal que o cliente precisa solucionar através deste novo sistema?</p>
+            </div>
+
+            <div class="pillar-card">
+                <span class="pillar-num">Pilar 2</span>
+                <div class="pillar-title">Atores & Elementos</div>
+                <p class="pillar-desc">Quais pessoas (clientes, funcionários) e objetos físicos/digitais (produtos, veículos, exames) interagem no negócio?</p>
+            </div>
+
+            <div class="pillar-card">
+                <span class="pillar-num">Pilar 3</span>
+                <div class="pillar-title">Atributos Relevantes</div>
+                <p class="pillar-desc">Quais características dos atores precisamos armazenar obrigatoriamente (ex: CPF, CNH, placa, preço, endereço)?</p>
+            </div>
+
+            <div class="pillar-card">
+                <span class="pillar-num">Pilar 4</span>
+                <div class="pillar-title">Filtro de Relevância</div>
+                <p class="pillar-desc">O que <strong>NÃO</strong> faz sentido registrar? (Ex: cor favorita do cliente ou raça do gato do motorista).</p>
+            </div>
+
+            <div class="pillar-card">
+                <span class="pillar-num">Pilar 5</span>
+                <div class="pillar-title">Regras de Negócio</div>
+                <p class="pillar-desc">Como as entidades se relacionam? (Ex: <em>"O médico prescreve exames"</em>; <em>"Um cliente só aluga com CNH válida"</em>).</p>
+            </div>
+
+            <div class="pillar-card">
+                <span class="pillar-num">Pilar 6</span>
+                <div class="pillar-title">Limites de Escopo</div>
+                <p class="pillar-desc">Quais são as fronteiras quantitativas e de suporte? (Ex: <em>"Não faremos a gestão da folha de pagamento nesta versão"</em>).</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: Roteiro da Missão Prática -->
+    <section class="section-card">
+        <h2>3. Roteiro Prático: Conduzindo a Entrevista em Duplas</h2>
+        
+        <ol class="step-list">
+            <li class="step-item">
+                <div class="step-title">Formação de Duplas e Escolha do Tema</div>
+                <div class="step-body">Forme sua dupla oficial de projeto da UC3. Escolham um nicho de mercado (ex: Pet Shop, Locadora de Veículos, E-commerce de Calçados, Clínica Médica, Barbearia ou Cafeteria Especializada).</div>
+            </li>
+            <li class="step-item">
+                <div class="step-title">Execução da Entrevista (Role-Play ou IA)</div>
+                <div class="step-body">
+                    Conduzam a entrevista investigativa através de uma das modalidades:
+                    <ul style="margin-top: 8px; margin-left: 20px;">
+                        <li><strong>Opção A (Role-Play):</strong> Um colega ou o professor interpreta o proprietário da empresa.</li>
+                        <li><strong>Opção B (Cliente de IA):</strong> Utilize um prompt pré-estruturado em ferramentas como ChatGPT ou Gemini para simular o cliente.</li>
+                    </ul>
+                </div>
+            </li>
+            <li class="step-item">
+                <div class="step-title">Redação do Primeiro Rascunho</div>
+                <div class="step-body">Estruture o texto em parágrafos claros descrevendo: apresentação do negócio, cadastro de clientes/produtos, fluxo de pedidos/serviços e restrições de operação.</div>
+            </li>
+        </ol>
+
+        <div class="code-block">
+            <div class="code-header">
+                <span>Prompt de Simulação • Cliente Virtual com IA</span>
+                <span>Engenharia de Prompt</span>
+            </div>
+            <pre><code>Você é o proprietário de uma [Locadora de Veículos / Pet Shop / E-commerce].
+Eu sou um analista de banco de dados e farei perguntas para entender as regras 
+do seu negócio para desenhar o banco de dados. 
+
+Responda como um cliente leigo no assunto de TI, descrevendo seu dia a dia, 
+seus problemas operacionais e as informações que você não pode perder de jeito nenhum.
+Não use termos como 'tabelas' ou 'SQL'. Apenas me responda quando eu perguntar.
+Podemos começar?</code></pre>
+        </div>
+    </section>
+
+    <!-- Section 4: Guia de Sobrevivência -->
+    <section class="section-card">
+        <h2>4. Guia de Sobrevivência (Conceitos-Chave)</h2>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 25%;">Termo</th>
+                        <th style="width: 45%;">Significado na Prática</th>
+                        <th style="width: 30%;">Exemplo Prático</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Minimundo</strong></td>
+                        <td>Texto em linguagem natural delimitando o escopo operacional do sistema.</td>
+                        <td>A descrição textual da locadora de veículos.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Requisito Funcional</strong></td>
+                        <td>Uma ação ou comportamento que o sistema deve ser capaz de executar.</td>
+                        <td>"O sistema deve registrar a quilometragem na devolução."</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Regra de Negócio</strong></td>
+                        <td>Restrição ou condição de validação aplicada às operações da empresa.</td>
+                        <td>"Clientes menores de 21 anos não podem locar SUVs."</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Atores</strong></td>
+                        <td>Pessoas, setores ou agentes que executam ações no fluxo.</td>
+                        <td>`Cliente`, `Atendente`, `Mecânico Responsável`.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Escopo</strong></td>
+                        <td>A fronteira clara entre o que entra no projeto e o que fica de fora.</td>
+                        <td>"Não rastrearemos multas de trânsito nesta versão."</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Section 5: Desafio de Bancada -->
+    <section class="section-card">
+        <h2>5. Desafio de Bancada da Aula 02</h2>
+        <p>Valide as entregas da aula de hoje com sua dupla:</p>
+
+        <div class="challenge-box">
+            <div class="challenge-header">
+                📋 Checklist de Atividades Práticas:
+            </div>
+            <ul class="task-list">
+                <li class="task-item">
+                    <input type="checkbox" class="task-checkbox" id="t1">
+                    <label for="t1"><strong>Tarefa 1:</strong> Definir a dupla de trabalho e o tema de negócio da Unidade Curricular.</label>
+                </li>
+                <li class="task-item">
+                    <input type="checkbox" class="task-checkbox" id="t2">
+                    <label for="t2"><strong>Tarefa 2:</strong> Realizar a entrevista investigativa cobrindo todos os 6 pilares de requisitos.</label>
+                </li>
+                <li class="task-item">
+                    <input type="checkbox" class="task-checkbox" id="t3">
+                    <label for="t3"><strong>Tarefa 3:</strong> Redigir o primeiro rascunho textual do Minimundo sem nenhum termo técnico de banco de dados.</label>
+                </li>
+                <li class="task-item">
+                    <input type="checkbox" class="task-checkbox" id="t4">
+                    <label for="t4"><strong>Tarefa 4:</strong> Salvar o texto localmente para preparação do versionamento no GitHub na Aula 03.</label>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p><strong>Curso Técnico em Desenvolvimento de Sistemas • Senac Ribeirão Preto</strong><br>Unidade Curricular 3: Modelar e Estruturar Banco de Dados • Docente: Haroldo Curti</p>
+    </footer>
+
+</div>
+
+</body>
+</html>

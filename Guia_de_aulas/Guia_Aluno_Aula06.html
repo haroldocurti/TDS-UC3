@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia da Aula 06 - Roteiro de Aula Prática: O Universo dos Games Retrô (DDL e DML) | Senac TDS01</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --senac-navy: #0F2137;
+            --senac-blue: #004B8D;
+            --senac-orange: #F37021;
+            --accent-blue: #0284C7;
+            --accent-teal: #0D9488;
+            --bg-main: #F8FAFC;
+            --bg-card: #FFFFFF;
+            --text-main: #1E293B;
+            --text-muted: #64748B;
+            --border-color: #E2E8F0;
+            --border-focus: #94A3B8;
+            --code-bg: #0F172A;
+            --code-text: #E2E8F0;
+            --alert-blue-bg: #F0F9FF;
+            --alert-blue-border: #0284C7;
+            --alert-amber-bg: #FFFBEB;
+            --alert-amber-border: #D97706;
+            --alert-emerald-bg: #F0FDF4;
+            --alert-emerald-border: #10B981;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.65;
+            font-size: 16px;
+            padding: 32px 16px 80px;
+        }
+
+        .container {
+            max-width: 920px;
+            margin: 0 auto;
+        }
+
+        .header-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 28px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border-top: 5px solid var(--senac-blue);
+        }
+
+        .meta-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+
+        .badge-senac {
+            background-color: #EBF3FA;
+            color: var(--senac-blue);
+        }
+
+        .badge-uc {
+            background-color: #E2E8F0;
+            color: #334155;
+        }
+
+        .badge-date {
+            background-color: #FEF3C7;
+            color: #92400E;
+        }
+
+        h1 {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--senac-navy);
+            line-height: 1.3;
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .section-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 28px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+
+        h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--senac-navy);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        h3 {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--senac-blue);
+            margin: 24px 0 12px;
+        }
+
+        p {
+            margin-bottom: 16px;
+            color: #334155;
+        }
+
+        .pillars-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .pillar-card {
+            background-color: #F8FAFC;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            transition: border-color 0.2s ease;
+        }
+
+        .pillar-card:hover {
+            border-color: var(--accent-blue);
+        }
+
+        .pillar-num {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 700;
+            background-color: var(--senac-blue);
+            color: #FFFFFF;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .pillar-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--senac-navy);
+            margin-bottom: 8px;
+        }
+
+        .pillar-desc {
+            font-size: 14px;
+            color: #475569;
+            line-height: 1.5;
+            margin-bottom: 0;
+        }
+
+        .diagram-box {
+            background-color: #F1F5F9;
+            border: 1px solid #CBD5E1;
+            border-radius: 8px;
+            padding: 24px;
+            margin: 24px 0;
+            text-align: center;
+        }
+
+        .diagram-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .diagram-node {
+            background: #FFFFFF;
+            border: 1.5px solid #94A3B8;
+            border-radius: 6px;
+            padding: 12px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--senac-navy);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .diagram-node.highlight {
+            border-color: var(--senac-blue);
+            background-color: #EBF3FA;
+            color: var(--senac-blue);
+            font-weight: 700;
+        }
+
+        .diagram-arrow {
+            font-size: 18px;
+            color: #64748B;
+            font-weight: bold;
+        }
+
+        .alert {
+            border-left: 4px solid;
+            border-radius: 0 8px 8px 0;
+            padding: 16px 20px;
+            margin: 20px 0;
+            font-size: 14.5px;
+        }
+
+        .alert-info {
+            background-color: var(--alert-blue-bg);
+            border-left-color: var(--alert-blue-border);
+            color: #0369A1;
+        }
+
+        .alert-warning {
+            background-color: var(--alert-amber-bg);
+            border-left-color: var(--alert-amber-border);
+            color: #92400E;
+        }
+
+        .alert-success {
+            background-color: var(--alert-emerald-bg);
+            border-left-color: var(--alert-emerald-border);
+            color: #065F46;
+        }
+
+        .alert strong {
+            font-weight: 700;
+        }
+
+        .code-block {
+            background-color: var(--code-bg);
+            border-radius: 8px;
+            margin: 16px 0 24px;
+            overflow: hidden;
+            border: 1px solid #1E293B;
+        }
+
+        .code-header {
+            background-color: #1E293B;
+            color: #94A3B8;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            font-weight: 500;
+            padding: 8px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #334155;
+        }
+
+        pre {
+            padding: 16px;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13.5px;
+            line-height: 1.6;
+            color: var(--code-text);
+        }
+
+        code {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .inline-code {
+            background-color: #E2E8F0;
+            color: #0F172A;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 13.5px;
+            font-weight: 500;
+        }
+
+        /* SQL Syntax Highlighting */
+        .sql-kw { color: #38BDF8; font-weight: 600; }
+        .sql-fn { color: #FBBF24; }
+        .sql-str { color: #4ADE80; }
+        .sql-cm { color: #64748B; font-style: italic; }
+        .sql-tbl { color: #E2E8F0; font-weight: 500; }
+
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 20px 0;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #F1F5F9;
+            color: var(--senac-navy);
+            font-weight: 700;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+            color: #334155;
+            vertical-align: top;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:nth-child(even) {
+            background-color: #F8FAFC;
+        }
+
+        .challenge-box {
+            background-color: #F8FAFC;
+            border: 2px solid #CBD5E1;
+            border-radius: 8px;
+            padding: 24px;
+            margin-top: 24px;
+        }
+
+        .challenge-header {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--senac-navy);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .task-list {
+            list-style: none;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 12px;
+            font-size: 14.5px;
+            color: #334155;
+        }
+
+        .task-checkbox {
+            margin-top: 4px;
+            accent-color: var(--senac-blue);
+            width: 16px;
+            height: 16px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        @media (max-width: 640px) {
+            body { padding: 16px 8px; }
+            .header-card, .section-card { padding: 20px; }
+            .pillars-grid { grid-template-columns: 1fr; }
+            .diagram-flow { flex-direction: column; }
+            .diagram-arrow { transform: rotate(90deg); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Header -->
+    <header class="header-card">
+        <div class="meta-badges">
+            <span class="badge badge-senac">Senac Ribeirão Preto • TDS</span>
+            <span class="badge badge-uc">UC3: Modelar e Estruturar Banco de Dados</span>
+            <span class="badge badge-date">Aula 06 • 04/08/2026</span>
+        </div>
+        <h1>Roteiro de Aula Prática — O Universo dos Games Retrô (DDL e DML)</h1>
+        <p class="subtitle">Construção e manipulação prática do banco de dados Retro-Vault no MySQL. Aplicação de comandos DDL, DML, gestão de chaves estrangeiras, decisões de charset utf8mb4 e evolução estrutural.</p>
+    </header>
+
+    <!-- Section 1: Minimundo e Arquitetura -->
+    <section class="section-card">
+        <h2>1. Minimundo & Arquitetura Relacional: Retro-Vault</h2>
+        <p>Você foi contratado(a) como engenheiro(a) de dados da <strong>Retro-Vault</strong>, uma plataforma digital focada na preservação histórica dos videogames clássicos. Sua missão é estruturar uma base sólida para catalogar desenvolvedoras lendárias, hardware/consoles e os jogos que marcaram época.</p>
+
+        <div class="diagram-box">
+            <p style="font-size: 13px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Arquitetura Relacional da Retro-Vault</p>
+            <div class="diagram-flow">
+                <div class="diagram-node">
+                    🏢 desenvolvedoras (Tabela Pai)<br><small>id_desenv (PK), nome, nacionalidade</small>
+                </div>
+                <div class="diagram-arrow">➔</div>
+                <div class="diagram-node highlight">
+                    🎮 jogos (Tabela Filha)<br><small>id_jogo (PK), titulo, ano_lanc, preco, id_desenv (FK), id_console (FK)</small>
+                </div>
+                <div class="diagram-arrow">⬅</div>
+                <div class="diagram-node">
+                    🕹️ consoles (Tabela Pai)<br><small>id_console (PK), nome_console</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="alert alert-info">
+            <strong>Decisão Técnica (Charset utf8mb4):</strong> Configuramos o banco explicitamente com <span class="inline-code">CHARACTER SET utf8mb4</span> e <span class="inline-code">COLLATE utf8mb4_unicode_ci</span> para permitir o armazenamento completo de 4 bytes por caractere, suportando emojis (ex: 🕹️, 👾, 🏆) e caracteres especiais sem corrupção silenciosa de dados.
+        </div>
+    </section>
+
+    <!-- Section 2: Dicionário de Dados -->
+    <section class="section-card">
+        <h2>2. Dicionário de Dados Técnico da Retro-Vault</h2>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tabela</th>
+                        <th>Campo</th>
+                        <th>Tipo Físico</th>
+                        <th>Restrições</th>
+                        <th>Finalidade Pedagógica</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>desenvolvedoras</strong></td>
+                        <td><span class="inline-code">id_desenv</span></td>
+                        <td>INT UNSIGNED</td>
+                        <td>PK, AUTO_INCREMENT</td>
+                        <td>Chave primária do estúdio de criação.</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><span class="inline-code">nome</span></td>
+                        <td>VARCHAR(100)</td>
+                        <td>NOT NULL, UNIQUE</td>
+                        <td>Nome único do estúdio (ex: Nintendo, Sega).</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><span class="inline-code">nacionalidade</span></td>
+                        <td>VARCHAR(70)</td>
+                        <td>DEFAULT 'Desconhecida'</td>
+                        <td>País de origem do estúdio.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>consoles</strong></td>
+                        <td><span class="inline-code">id_console</span></td>
+                        <td>INT UNSIGNED</td>
+                        <td>PK, AUTO_INCREMENT</td>
+                        <td>Chave primária da plataforma.</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><span class="inline-code">nome_console</span></td>
+                        <td>VARCHAR(50)</td>
+                        <td>NOT NULL</td>
+                        <td>Nome do hardware (ex: SNES, Mega Drive).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>jogos</strong></td>
+                        <td><span class="inline-code">id_jogo</span></td>
+                        <td>INT UNSIGNED</td>
+                        <td>PK, AUTO_INCREMENT</td>
+                        <td>Identificador exclusivo do título.</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><span class="inline-code">titulo</span></td>
+                        <td>VARCHAR(150)</td>
+                        <td>NOT NULL</td>
+                        <td>Título oficial do jogo.</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><span class="inline-code">ano_lanc</span></td>
+                        <td>YEAR</td>
+                        <td>NOT NULL</td>
+                        <td>Ano de 4 dígitos do lançamento.</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><span class="inline-code">preco</span></td>
+                        <td>DECIMAL(10,2)</td>
+                        <td>NOT NULL</td>
+                        <td>Preço de mercado para colecionadores.</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><span class="inline-code">nota_metacritic</span></td>
+                        <td>DECIMAL(3,1)</td>
+                        <td>CHECK (0.0 a 10.0)</td>
+                        <td>Avaliação da crítica (via ALTER TABLE).</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><span class="inline-code">id_desenv</span></td>
+                        <td>INT UNSIGNED</td>
+                        <td>FK</td>
+                        <td>Vínculo com a tabela <span class="inline-code">desenvolvedoras</span>.</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><span class="inline-code">id_console</span></td>
+                        <td>INT UNSIGNED</td>
+                        <td>FK</td>
+                        <td>Vínculo com a tabela <span class="inline-code">consoles</span>.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Section 3: Scripts DDL -->
+    <section class="section-card">
+        <h2>3. Laboratório Prático DDL: Construção e Evolução do Esquema</h2>
+        <p>Acesse a aba <strong>SQL</strong> do phpMyAdmin e execute os comandos de definição de dados:</p>
+
+        <div class="code-block">
+            <div class="code-header">
+                <span>SQL • Criação Idempotente do Banco e Tabelas</span>
+                <span>MySQL</span>
+            </div>
+            <pre><span class="sql-kw">SET NAMES</span> utf8mb4;
+
+<span class="sql-kw">DROP DATABASE IF EXISTS</span> db_retro_games;
+<span class="sql-kw">CREATE DATABASE</span> db_retro_games 
+  <span class="sql-kw">CHARACTER SET</span> utf8mb4 
+  <span class="sql-kw">COLLATE</span> utf8mb4_unicode_ci;
+
+<span class="sql-kw">USE</span> db_retro_games;
+
+<span class="sql-cm">-- 1. Criação das Tabelas Pais (Independentes)</span>
+<span class="sql-kw">CREATE TABLE</span> desenvolvedoras (
+    id_desenv <span class="sql-kw">INT UNSIGNED AUTO_INCREMENT PRIMARY KEY</span>,
+    nome <span class="sql-kw">VARCHAR</span>(100) <span class="sql-kw">NOT NULL UNIQUE</span>,
+    nacionalidade <span class="sql-kw">VARCHAR</span>(50)
+) <span class="sql-kw">ENGINE</span>=InnoDB;
+
+<span class="sql-kw">CREATE TABLE</span> consoles (
+    id_console <span class="sql-kw">INT UNSIGNED AUTO_INCREMENT PRIMARY KEY</span>,
+    nome_console <span class="sql-kw">VARCHAR</span>(50) <span class="sql-kw">NOT NULL</span>
+) <span class="sql-kw">ENGINE</span>=InnoDB;
+
+<span class="sql-cm">-- 2. Criação da Tabela Filha com Restrições de FK Explícitas</span>
+<span class="sql-kw">CREATE TABLE</span> jogos (
+    id_jogo <span class="sql-kw">INT UNSIGNED AUTO_INCREMENT PRIMARY KEY</span>,
+    titulo <span class="sql-kw">VARCHAR</span>(150) <span class="sql-kw">NOT NULL</span>,
+    ano_lanc <span class="sql-kw">YEAR NOT NULL</span>,
+    preco <span class="sql-kw">DECIMAL</span>(10,2) <span class="sql-kw">NOT NULL</span>,
+    id_desenv <span class="sql-kw">INT UNSIGNED</span>,
+    id_console <span class="sql-kw">INT UNSIGNED</span>,
+    <span class="sql-kw">CONSTRAINT</span> fk_desenv_jogo <span class="sql-kw">FOREIGN KEY</span> (id_desenv) <span class="sql-kw">REFERENCES</span> desenvolvedoras(id_desenv),
+    <span class="sql-kw">CONSTRAINT</span> fk_console_jogo <span class="sql-kw">FOREIGN KEY</span> (id_console) <span class="sql-kw">REFERENCES</span> consoles(id_console)
+) <span class="sql-kw">ENGINE</span>=InnoDB;</pre>
+        </div>
+
+        <h3>Evolução de Esquema sem Perda de Dados (<span class="inline-code">ALTER TABLE</span>)</h3>
+        <div class="code-block">
+            <div class="code-header">
+                <span>SQL • Modificações Estruturais com ALTER TABLE</span>
+                <span>MySQL</span>
+            </div>
+            <pre><span class="sql-cm">-- Adicionando coluna com validação CHECK</span>
+<span class="sql-kw">ALTER TABLE</span> jogos 
+<span class="sql-kw">ADD COLUMN</span> nota_metacritic <span class="sql-kw">DECIMAL</span>(3,1) <span class="sql-kw">CHECK</span> (nota_metacritic <span class="sql-kw">BETWEEN</span> 0 <span class="sql-kw">AND</span> 10);
+
+<span class="sql-cm">-- Modificando tamanho e valor default de coluna existente</span>
+<span class="sql-kw">ALTER TABLE</span> desenvolvedoras 
+<span class="sql-kw">MODIFY COLUMN</span> nacionalidade <span class="sql-kw">VARCHAR</span>(70) <span class="sql-kw">DEFAULT</span> <span class="sql-str">'Desconhecida'</span>;
+
+<span class="sql-cm">-- Criando índice para acelerar consultas por título de jogo</span>
+<span class="sql-kw">CREATE INDEX</span> idx_jogos_titulo <span class="sql-kw">ON</span> jogos(titulo);</pre>
+        </div>
+    </section>
+
+    <!-- Section 4: Scripts DML e Testes -->
+    <section class="section-card">
+        <h2>4. Laboratório Prático DML: Povoamento e Análise de Falhas</h2>
+
+        <div class="code-block">
+            <div class="code-header">
+                <span>SQL • Inserção Ordenada (DML)</span>
+                <span>MySQL</span>
+            </div>
+            <pre><span class="sql-cm">-- 1. Povoando tabelas pais primeiro</span>
+<span class="sql-kw">INSERT INTO</span> desenvolvedoras (nome, nacionalidade) <span class="sql-kw">VALUES</span> 
+(<span class="sql-str">'Nintendo'</span>, <span class="sql-str">'Japão'</span>),
+(<span class="sql-str">'Sega'</span>, <span class="sql-str">'Japão'</span>),
+(<span class="sql-str">'Capcom'</span>, <span class="sql-str">'Japão'</span>);
+
+<span class="sql-kw">INSERT INTO</span> consoles (nome_console) <span class="sql-kw">VALUES</span> 
+(<span class="sql-str">'SNES'</span>),
+(<span class="sql-str">'Mega Drive'</span>),
+(<span class="sql-str">'Arcade'</span>);
+
+<span class="sql-cm">-- 2. Povoando tabela filha associada</span>
+<span class="sql-kw">INSERT INTO</span> jogos (titulo, ano_lanc, preco, id_desenv, id_console, nota_metacritic) <span class="sql-kw">VALUES</span> 
+(<span class="sql-str">'Super Mario World'</span>, 1990, 250.00, 1, 1, 9.7),
+(<span class="sql-str">'Sonic the Hedgehog'</span>, 1991, 180.00, 2, 2, 8.8),
+(<span class="sql-str">'Street Fighter II'</span>, 1991, 300.00, 3, 3, 9.5);</pre>
+        </div>
+
+        <div class="alert alert-warning">
+            <strong>Provocação Pedagógica (Erro 1451):</strong> Se você tentar executar <span class="inline-code">DELETE FROM desenvolvedoras WHERE nome = 'Nintendo';</span>, o MySQL bloqueará a operação com o <em>Erro 1451</em>. Isso ocorre porque o banco protege a integridade referencial, impedindo a existência de jogos "órfãos" sem desenvolvedora.
+        </div>
+    </section>
+
+    <!-- Section 5: Desafio de Bancada -->
+    <section class="section-card">
+        <h2>5. Desafio de Bancada da Aula 06</h2>
+
+        <div class="challenge-box">
+            <div class="challenge-header">
+                📋 Checklist de Atividades Práticas:
+            </div>
+            <ul class="task-list">
+                <li class="task-item">
+                    <input type="checkbox" class="task-checkbox" id="t1">
+                    <label for="t1"><strong>Tarefa 1:</strong> Executar o script de criação do banco <span class="inline-code">db_retro_games</span> com charset <span class="inline-code">utf8mb4</span>.</label>
+                </li>
+                <li class="task-item">
+                    <input type="checkbox" class="task-checkbox" id="t2">
+                    <label for="t2"><strong>Tarefa 2:</strong> Adicionar a coluna <span class="inline-code">nota_metacritic</span> via <span class="inline-code">ALTER TABLE</span> com restrição <span class="inline-code">CHECK</span>.</label>
+                </li>
+                <li class="task-item">
+                    <input type="checkbox" class="task-checkbox" id="t3">
+                    <label for="t3"><strong>Tarefa 3:</strong> Inserir os estúdios, consoles e 3 jogos clássicos na tabela <span class="inline-code">jogos</span>.</label>
+                </li>
+                <li class="task-item">
+                    <input type="checkbox" class="task-checkbox" id="t4">
+                    <label for="t4"><strong>Tarefa 4:</strong> Simular o teste de integridade referencial (tentativa de deleção da tabela pai) e conferir o Erro 1451.</label>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p><strong>Curso Técnico em Desenvolvimento de Sistemas • Senac Ribeirão Preto</strong><br>Unidade Curricular 3: Modelar e Estruturar Banco de Dados • Docente: Haroldo Curti</p>
+    </footer>
+
+</div>
+
+</body>
+</html>

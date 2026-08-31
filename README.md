@@ -20,35 +20,38 @@ Neste repositório você encontrará todos os materiais pedagógicos e guias de 
 
 Acompanhe os guias detalhados de cada encontro da UC3:
 
-- **[Aula 01 (08/06/2026)](Guia_de_aulas/Guia_Aluno_Aula01.md): Introdução a Bancos de Dados**  
+- **[Aula 01 (08/06/2026)](Guia_de_aulas/Guia_Aluno_Aula01.html): Introdução a Bancos de Dados**  
   Diferenciação de dados e informações, volatilidade da memória RAM vs. persistência física, o papel dos SGBDs e a dinâmica lúdica *"Stop dos Dados"* comparando bancos SQL e NoSQL.
 
-- **[Aula 02 (22/06/2026)](Guia_de_aulas/Guia_Aluno_Aula02.md): Levantamento de Requisitos e o Minimundo**  
+- **[Aula 02 (22/06/2026)](Guia_de_aulas/Guia_Aluno_Aula02.html): Levantamento de Requisitos e o Minimundo**  
   Conceitos de escopo em linguagem natural, aplicação de perguntas guia de investigação e simulação de requisitos através de role-play e prompts de IA.
 
-- **[Aula 03 (29/06/2026)](Guia_de_aulas/Guia_Aluno_Aula03.md): Escrita do Minimundo, GitHub e Homologação de Requisitos**  
+- **[Aula 03 (29/06/2026)](Guia_de_aulas/Guia_Aluno_Aula03.html): Escrita do Minimundo, GitHub e Homologação de Requisitos**  
   Redação formal e versionamento do `minimundo.md` no GitHub, realização de auditoria cruzada por pares (*Peer Review*) e tratamento de lacunas de escopo via GitHub Issues.
 
-- **[Aula 04 (27/07/2026)](Guia_de_aulas/Guia_Aluno_Aula04.md): Validação do DER, MER e Dicionário de Dados**  
+- **[Aula 04 (27/07/2026)](Guia_de_aulas/Guia_Aluno_Aula04.html): Validação do DER, MER e Dicionário de Dados**  
   Revisão e auditoria técnica da documentação de modelagem iniciada na UC1. Alinhamento de regras de normalização, verificação de chaves primárias e estrangeiras e especificação do Dicionário de Dados.
 
-- **[Aula 05 (03/08/2026)](Guia_de_aulas/Guia_Aluno_Aula05.md): Do Minimundo à Normalização e Primeiro Acesso ao phpMyAdmin**  
+- **[Aula 05 (03/08/2026)](Guia_de_aulas/Guia_Aluno_Aula05.html): Do Minimundo à Normalização e Primeiro Acesso ao phpMyAdmin**  
   Pipeline da engenharia de dados, aplicação prática das Formas Normais (**1FN, 2FN e 3FN**) para eliminação de redundâncias e navegação inicial na interface do phpMyAdmin.
 
-- **[Aula 06 (04/08/2026)](Guia_de_aulas/Guia_Aluno_Aula06.md): Roteiro Prático de SQL — O Universo dos Games Retrô (DDL e DML)**  
+- **[Aula 06 (04/08/2026)](Guia_de_aulas/Guia_Aluno_Aula06.html): Roteiro Prático de SQL — O Universo dos Games Retrô (DDL e DML)**  
   Construção e manipulação na prática do banco de dados *Retro-Vault*. Aplicação de comandos DDL (`CREATE`, `ALTER`), DML (`INSERT`, `UPDATE`), chaves estrangeiras (`FOREIGN KEY`) e escolha estratégica de charset (`utf8mb4`).
 
-- **[Aula 08 (10/08/2026)](Guia_de_aulas/Guia_Aluno_Aula08.md): Oficina Prática de Estruturação e Manipulação em MySQL (DDL e DML)**  
+- **[Aula 08 (10/08/2026)](Guia_de_aulas/Guia_Aluno_Aula08.html): Oficina Prática de Estruturação e Manipulação em MySQL (DDL e DML)**  
   Criação de esquemas relacionais, gestão de constraints e chaves estrangeiras, evolução com `ALTER TABLE` e operações de carga e manutenção com `INSERT`, `UPDATE`, `DELETE` e `TRUNCATE`.
 
-- **[Aula 09 (11/08/2026)](Guia_de_aulas/Guia_Aluno_Aula09.md): Retomada Prática e Fixação dos Conceitos da Aula 06**  
+- **[Aula 09 (11/08/2026)](Guia_de_aulas/Guia_Aluno_Aula09.html): Retomada Prática e Fixação dos Conceitos da Aula 06**  
   Nivelamento e consolidação de bancada sobre criação de tabelas pai e filha, chaves estrangeiras (`FOREIGN KEY`), evolução de esquema (`ALTER TABLE`), simulação de violação de integridade referencial (Erro 1451) e comparação entre `TRUNCATE` e `DELETE`.
 
-- **[Aula 10 (17/08/2026)](Guia_de_aulas/Guia_Aluno_Aula10.md): Materialização Física dos Projetos Integradores — Criando as Tabelas dos Projetos no MySQL**  
+- **[Aula 10 (17/08/2026)](Guia_de_aulas/Guia_Aluno_Aula10.html): Materialização Física dos Projetos Integradores — Criando as Tabelas dos Projetos no MySQL**  
   Criação física das bases de dados e execução dos scripts DDL com as tabelas, tipos de dados e constraints dos Projetos Integradores desenvolvidos nas aulas do Prof. Facine.
 
-- **[Aula 11 (18/08/2026)](Guia_de_aulas/Guia_Aluno_Aula11.md): Consultas Relacionais em SQL (DQL) e Análise de Dados — Estudo de Caso TechStore Brasil**  
+- **[Aula 11 (18/08/2026)](Guia_de_aulas/Guia_Aluno_Aula11.html): Consultas Relacionais em SQL (DQL) e Análise de Dados — Estudo de Caso TechStore Brasil**  
   Recuperação com `SELECT`/`FROM`/`WHERE`, filtros avançados (`BETWEEN`, `IN`, `LIKE`), ordenação e limites (`ORDER BY`, `LIMIT`), funções de agregação (`COUNT`, `SUM`, `AVG`, `MIN`, `MAX`), agrupamentos e filtros de grupos (`GROUP BY`, `HAVING`), junções relacionais (`INNER JOIN`, `LEFT JOIN` com `IS NULL`) e resolução de 15 chamados corporativos no estudo de caso *TechStore Brasil*.
+
+- **[Aula 14 (31/08/2026)](Guia_de_aulas/Guia_Aluno_Aula14.html): Visões Relacionais (Views), Consultas Aninhadas e Gestão de Dados**  
+  Camada de abstração com visões relacionais (`CREATE OR REPLACE VIEW`), segurança de dados / conformidade LGPD, visões operacionais de faturamento e estoque, além de rotinas operacionais de exportação, importação e backup (Indicador 7).
 
 ---
 
@@ -59,6 +62,7 @@ Consulte os arquivos na pasta **[Biblioteca/](Biblioteca/)** para aprofundar seu
 | Arquivo | Formato | Descrição |
 | --- | --- | --- |
 | `loja_teste_completo.sql` | Script SQL | Script consolidado (DDL + DML) do banco de dados `loja_teste` da TechStore Brasil (clientes, produtos, pedidos e itens). |
+| [Guia_Completo_Normalizacao_1FN_a_5FN.html](Biblioteca/Guia_Completo_Normalizacao_1FN_a_5FN.html) | Guia HTML Interativo | Manual definitivo de Normalização: 1FN, 2FN, 3FN, BCNF, 4FN, 5FN, anomalias e checklists. |
 | `Comandos DDL do MySQL.pdf` | Documento PDF | Guia de referência rápida para comandos de definição de dados (`CREATE`, `ALTER`, `DROP`). |
 | `Comandos DML em MySQL.pdf` | Documento PDF | Manual prático para inserção, atualização e consulta de dados (`INSERT`, `UPDATE`, `DELETE`, `SELECT`). |
 | `Constraints de Tabela no MySQL_ Funções e Exemplos.pdf` | Documento PDF | Explicação sobre restrições de integridade (`PRIMARY KEY`, `FOREIGN KEY`, `NOT NULL`, `UNIQUE`, `CHECK`). |
