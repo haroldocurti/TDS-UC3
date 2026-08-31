@@ -63,6 +63,7 @@ Consulte os arquivos na pasta **[Biblioteca/](Biblioteca/)** para aprofundar seu
 | --- | --- | --- |
 | `loja_teste_completo.sql` | Script SQL | Script consolidado (DDL + DML) do banco de dados `loja_teste` da TechStore Brasil (clientes, produtos, pedidos e itens). |
 | [Guia_Completo_Normalizacao_1FN_a_5FN.html](Biblioteca/Guia_Completo_Normalizacao_1FN_a_5FN.html) | Guia HTML Interativo | Manual definitivo de Normalização: 1FN, 2FN, 3FN, BCNF, 4FN, 5FN, anomalias e checklists. |
+| [Guia_Completo_Chaves_Banco_de_Dados.html](Biblioteca/Guia_Completo_Chaves_Banco_de_Dados.html) | Guia HTML Interativo | Manual definitivo sobre Chaves Relacionais: Superchaves, Candidatas, PKs, AKs, FKs, Compostas, Conjugadas, Substitutas e Naturais. |
 | `Comandos DDL do MySQL.pdf` | Documento PDF | Guia de referência rápida para comandos de definição de dados (`CREATE`, `ALTER`, `DROP`). |
 | `Comandos DML em MySQL.pdf` | Documento PDF | Manual prático para inserção, atualização e consulta de dados (`INSERT`, `UPDATE`, `DELETE`, `SELECT`). |
 | `Constraints de Tabela no MySQL_ Funções e Exemplos.pdf` | Documento PDF | Explicação sobre restrições de integridade (`PRIMARY KEY`, `FOREIGN KEY`, `NOT NULL`, `UNIQUE`, `CHECK`). |
